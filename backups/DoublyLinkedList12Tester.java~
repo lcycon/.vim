@@ -1,0 +1,381 @@
+/**
+ * Project 02 Tester Class
+ * CSE 12
+ * @author: Adam William Kuipers (A09511551)
+ * @version: 2011.08.16.01
+ */
+import java.util.*;
+import org.junit.*;
+import static org.junit.Assert.*;
+
+public class DoublyLinkedList12Tester {
+    DoublyLinkedList12<String> _testList; 
+    Iterator<String> _testIterator; 
+
+    /**
+     * Assign new objects before each test.
+     */
+    @Before 
+    public void setUp() {
+        _testList = new DoublyLinkedList12<String>();
+        _testIterator = _testList.iterator();
+    }
+        
+    /**
+     * Tests the class' ability to add a single element
+     */
+    @Test 
+    public void testAddOneElement() {
+        _testList.add("1");
+        assertEquals(1,_testList.size());
+    }
+
+    /**
+     * Tests the class' ability to add one thousand elements
+     */
+    @Test 
+    public void testAddOneThousandElements() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        assertEquals(1000,_testList.size());
+    }
+
+    /** 
+     * Tests the class' ability to add to front of list and to get first element.
+     */
+    @Test 
+    public void testAddToFrontAndGetFirst() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.addToFront("Charizard");
+        assertEquals("Charizard",_testList.get(0));
+    }
+
+    /** 
+     * Tests the class' ability to add to back of list and to get last element.
+     */
+    @Test 
+    public void testAddToFrontAndGetLast() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.addToBack("Charizard");
+        assertEquals("Charizard",_testList.get(1000));
+    }
+
+    /** 
+     * Tests the class' ability to get second element.
+     */
+    @Test 
+    public void testGetSecond() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        assertEquals("1",_testList.get(1));
+    }
+
+    /**
+     * Tests the class' ability to add to front of list and to remove from front.
+     */
+    @Test 
+    public void testRemoveFromFront() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.addToFront("Charizard");
+        _testList.removeFront();
+        assertEquals("0",_testList.get(0));
+        assertEquals(false,_testList.contains("Charizard"));
+    }
+
+    /**
+     * Tests the class' ability to add to back of list and to remove from back.
+     */
+    @Test 
+    public void testRemoveFromBack() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.addToBack("Charizard");
+        _testList.removeBack();
+        assertEquals("999",_testList.get(999));
+        assertEquals(false,_testList.contains("Charizard"));
+    }
+
+    /**
+     * Test the remove(o) method.
+     */
+    @Test 
+    public void testRemove() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add("Charizard");
+        for (int i = 50; i < 100; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        // Check if Charizard is found
+        assertEquals(true,_testList.remove("Charizard"));
+        // Check if Charizard is in fact removed
+        assertEquals(100,_testList.size());
+        // Check if Charizard is in fact missing
+        assertEquals(false,_testList.contains("Charizard"));
+    }
+
+    /**
+     * Test the remove(null) method.
+     */
+    @Test 
+    public void testRemoveNull() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add(null);
+        for (int i = 50; i < 100; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        // Check if null is found
+        assertEquals(true,_testList.remove(null));
+        // Check if null was in fact removed
+        assertEquals(100,_testList.size());
+        // Check if null is in fact missing
+        assertEquals(false,_testList.contains(null));
+    }
+
+    /**
+     * Test remove when elements is not in the list.
+     */
+    @Test
+    public void testRemoveFalse() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add(null);
+        // Make sure loop won't stop at null element
+        assertEquals(false,_testList.contains("No"));
+    }
+    /**
+     * Test the contains(o) method.
+     */
+    @Test 
+    public void testContains1() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add("Charizard");
+        for (int i = 0; i < 50; i++) {
+            _testList.add("Squirtle");
+        }
+        assertEquals(true,_testList.contains("Charizard"));
+    }
+
+    /**
+     * Test the contains(o) method at the end of list.
+     */
+    @Test 
+    public void testContains2() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int i = 0; i < 50; i++) {
+            _testList.add("Squirtle");
+        }
+        _testList.addToFront("Charizard");
+        assertEquals(true,_testList.contains("Charizard"));
+    }
+
+    /**
+     * Test the contains(null) method.
+     */
+    @Test 
+    public void testContainsNull() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add(null);
+        for (int i = 0; i < 50; i++) {
+            _testList.add("Squirtle");
+        }
+        assertEquals(true,_testList.contains(null));
+    }
+
+    /**
+     * Test contains when elements is not in the list.
+     */
+    @Test
+    public void testContainsFalse() {
+        for (int i = 0; i < 50; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.add(null);
+        // Make sure loop won't stop at null element
+        assertEquals(false,_testList.contains("No"));
+    }
+
+    /**
+     * Test the clear method
+     */
+    @Test 
+    public void testClear() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.clear();
+        assertEquals(0,_testList.size());
+    }
+
+    /**
+     * Test exception print from removeFront
+     */
+    @Test (expected = NoSuchElementException.class)
+    public void testRemoveFrontNoSuchElementException() {
+        _testList.removeFront();
+    }
+
+    /**
+     * Test exception print from removeBack
+     */
+    @Test (expected = NoSuchElementException.class)
+    public void testRemoveBackNoSuchElementException() {
+        _testList.removeBack();
+    }
+
+    /**
+     * Test exception print from get(-2)
+     */
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void testGetIndexOutOfBoundsException1() {
+        for (int i = 0; i < 1000; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.get(-2);
+    }
+
+    /**
+     * Test exception print from get(10) with only 5 imputs
+     */
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void testGetIndexOutOfBoundsException2() {
+        for (int i = 0; i < 5; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testList.get(10);
+    }
+
+    /**
+     * Test the implementor's hasNext() method, checking from the head.
+     */
+    @Test
+    public void testImplementorHasNext1() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        assertEquals(true,_testIterator.hasNext());
+    }
+
+    /**
+     * Test the implementor's hasNext() method, checking from the last node as
+     * well as check if the next() method works.
+     */
+    @Test
+    public void testImplementorHasNext2() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int j = 0; j < 10; j++) {
+            _testIterator.next();
+        }
+        assertEquals(false,_testIterator.hasNext());
+    }
+
+    /**
+     * Test the implementor's hasNext() method, checking from an empty list.
+     */
+    @Test
+    public void testImplementorHasNextEmpty() {
+        assertEquals(false,_testIterator.hasNext());
+    }
+
+    /**
+     * Test the implementor's exception cast if next is called with no elements
+     * in the list.
+     */
+    @Test (expected = NoSuchElementException.class)
+    public void testImplementorNextException1() {
+        _testIterator.next();
+    }
+
+    /**
+     * Test the implementors exception cast if next is called at the end of list.
+     */
+    @Test (expected = NoSuchElementException.class)
+    public void testImplementorNextException2() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int j = 0; j < 11; j++) {
+            _testIterator.next();
+        }
+    }
+
+    /**
+     * Test the implementors remove() method.
+     */
+    @Test
+    public void testImplementorRemove() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int j = 0; j < 10; j++) {
+            _testIterator.next();
+        }
+        _testIterator.remove();
+        assertEquals(9,_testList.size());
+    }
+
+    /**
+     * Test the implementors remove() exception cast if next() hasn't been 
+     * called
+     */
+    @Test (expected = IllegalStateException.class)
+    public void testImplementorRemoveException1() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        _testIterator.remove();
+    }
+
+    /**
+     * Test the implementors remove() exception cast if remove() has already 
+     * been called without calling next().
+     */
+    @Test (expected = IllegalStateException.class)
+    public void testImplementorRemoveException2() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int j = 0; j < 5; j++) {
+            _testIterator.next();
+        }
+        _testIterator.remove();
+        _testIterator.remove();
+    }
+
+    /**
+     * Test the implementor's reaction when removeBack is called during 
+     * and iteration.
+     */
+    @Test
+    public void testImplementorRemoveException3() {
+        for (int i = 0; i < 10; i++) {
+            _testList.add(String.valueOf(i));
+        }
+        for (int j = 0; j < 10; j++) {
+            _testIterator.next();
+        }
+        _testList.removeBack();
+        _testIterator.remove();
+    }
+}

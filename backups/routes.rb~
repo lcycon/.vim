@@ -1,0 +1,21 @@
+Tw2::Application.routes.draw do
+
+  resources :emails
+
+  devise_for :users
+
+  resources :home do
+    collection do
+      get 'start_conference'
+    end
+  end
+
+  resources :contacts do
+    collection do
+      get :import
+    end
+  end
+
+  resources :users
+  root :to => 'home#index'
+end

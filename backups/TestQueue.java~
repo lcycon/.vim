@@ -1,0 +1,15 @@
+class TestQueue { 
+
+    public static void main(String[] args) {
+        QueueImpl12<String> ring = new QueueImpl12<String>(10);
+        ring.enqueue("This");
+        ring.enqueue("is");
+        ring.enqueue("a");
+        ring.enqueue("test");
+
+        while (ring.size() != 0) {
+            System.out.println(ring.dequeue());
+        }
+    }
+}
+

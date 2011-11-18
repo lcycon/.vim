@@ -1,0 +1,115 @@
+import java.util.*;
+import org.junit.*;
+import static org.junit.Assert.*;
+
+public class QueueImpl12Tester {
+    QueueImpl12<String> queue;
+    @Before
+    public void setUp() {
+         queue = new QueueImpl12<String>(2000);
+    }
+
+    @Test
+    public void testEnqueue() {
+        queue.enqueue("queer");
+        assertEquals(1,queue.size());
+        assertEquals("queer",queue.dequeue());
+        assertEquals(0,queue.size());
+
+        assertEquals(2000,queue.capacity());
+
+        // Stress Test
+        for (int i = 0; i < 1000; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals(1000, queue.size());
+        assertEquals("0",queue.peek());
+
+        for (int i = 0; i < 500; i++) {
+            queue.dequeue();
+        }
+        assertEquals(500, queue.size());
+
+        // Stress Test
+        for (int i = 0; i < 1000; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        queue.clear();
+        assertEquals(0, queue.size());
+
+        // Stress Test
+        for (int i = 0; i < 1000; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals(1000, queue.size());
+        assertEquals("0",queue.peek());
+
+        for (int i = 0; i < 500; i++) {
+            queue.dequeue();
+        }
+        assertEquals(500, queue.size());
+
+        // Stress Test
+        for (int i = 0; i < 1000; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+    }
+
+    @Test (expected = NoSuchElementException.class)
+    public void testExceptions() {
+        queue.dequeue();
+       queue.peek(); 
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testExceptions2() {
+       queue = new QueueImpl12<String>(-3);
+    }
+    @Test
+    public void testFullQueue() {
+        for (int i = 0; i < 2000; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals(false,queue.enqueue("false"));
+    }
+
+    @Test
+    public void testJacobsTest() {
+        queue = new QueueImpl12<String>(5);
+        for (int i = 0; i<4; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals("0",queue.dequeue());
+        assertEquals("1",queue.dequeue());
+        assertEquals("2",queue.dequeue());
+        assertEquals("3",queue.dequeue());
+
+        // AGAIN
+        for (int i = 0; i<4; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals("0",queue.dequeue());
+        assertEquals("1",queue.dequeue());
+        assertEquals("2",queue.dequeue());
+        assertEquals("3",queue.dequeue());
+
+        // AGAIN
+        for (int i = 0; i<4; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals("0",queue.dequeue());
+        assertEquals("1",queue.dequeue());
+        assertEquals("2",queue.dequeue());
+        assertEquals("3",queue.dequeue());
+
+        // AGAIN
+        for (int i = 0; i<4; i++) {
+            queue.enqueue(String.valueOf(i));
+        }
+        assertEquals("0",queue.dequeue());
+        assertEquals("1",queue.dequeue());
+        assertEquals("2",queue.dequeue());
+        assertEquals("3",queue.dequeue());
+    }
+}
+

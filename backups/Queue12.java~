@@ -1,0 +1,50 @@
+import java.util.*;
+
+/** Abstract data type for a <em>generic</em> queue. The implementing
+  * class <em>must</em> implement the queue using a ring buffer consisting of
+  * a Java array (of type <tt>T</tt>) as the underlying storage for this ADT.
+  * In addition, the implementing class must offer a constructor that takes exactly
+  * one argument, namely an integer that specifies the <em>capacity</em> of the queue.
+  * The implementing class must also offer a default constructor that takes no parameters
+  * and that initializes the queue to have some default capacity (whose magnitude 
+  * may be decided by the implementor).
+  * @author Jacob Whitehill
+ */
+public interface Queue12<T> {
+	/** Removes all elements from the queue. */
+	void clear ();
+
+	/** Returns the <em>capacity</em> of the queue, i.e., the
+          * maximum number of elements that can be stored in the queue.
+          * The capacity of the queue is equivalent to the size of the Java array used
+          * to implementor the ring buffer (the underlying storage of the queue).
+          * @return the capacity of the queue. */
+	int capacity ();
+
+	/** Returns the number of elements (<tt>null</tt> or otherwise) currently stored in the
+	  * queue.
+	  * @return the number of elements stored in the queue.
+	  */
+	int size ();
+
+	/** Attempts to add the specified element <tt>o</tt> to the <em>back</em> of the queue.
+          * The attempt will fail if, and only if, the queue's size is already equal to its
+          * capacity. <tt>o</tt> may be <tt>null</tt>. This method must run in time O(1) worst-case.
+	  * @param o the object to be enqueued.
+          * @return whether the attempt to add was successful.
+	  */
+	boolean enqueue (T o);
+	
+	/** Removes and returns the object stored at the <em>front</em> of the queue.
+          * This method must run in time O(1) worst-case.
+          * @return the element that was just removed from the front of the queue.
+	  * @throws NoSuchElementException if the queue is empty.
+          */
+	T dequeue ();
+
+	/** Returns the object stored at the <em>front</em> of the queue.
+          * @return the object that is currently stored at the front of the queue.
+	  * @throws NoSuchElementException if the queue is empty.
+          */
+	T peek ();
+}

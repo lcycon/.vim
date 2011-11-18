@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main() {
+    char a[] = "SPARC";
+    char *p = a;
+
+    printf( "%c", *p++);
+    printf( "%c", *(p+2) = p[3]);
+    printf( "%c", *(p+3) = p[-1]);
+    printf( "%c", *++p);
+    printf( "%c", *p++ = *a + 2);
+    printf( "%c", ++*p++ );
+    printf( "%d", ++p - a);
+    printf( "%s", "\n%s\n", a );
+    return 0;
+}

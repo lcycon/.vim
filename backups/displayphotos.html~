@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <!--css imports-->
+        <link rel="stylesheet" href="grid.css" type="text/css" />
+        <link rel="stylesheet" href="button.css" type="text/css" />
+        <!--JavaScript import-->
+        <script type="text/javascript" src="jquery-1.7.js" ></script>
+        <script type="text/javascript">
+            var iteration = 1; // Iteration through the loop
+            var i = 0; // Iterator
+            var ROWS = 15; // Rows of photos
+
+            /* JSON ARRAY */
+        var photos = [<? echo $jsonphotoarray; ?> ]
+            function loop(rows) {
+                for ( ; i < (rows * iteration); i += 3) {
+                    if ( i < photos.length){
+                        $('#col1').append("<img class = 'normal' src = '" + photos[i] + "'/><br/>");
+                    }
+                    if ( i + 1 < photos.length){
+                        $('#col2').append("<img class = 'normal' src = '" + photos[i + 1] + "'/><br/>");
+                    }
+                    if ( i + 2 < photos.length){
+                        $('#col3').append("<img class = 'normal' src = '" + photos[i + 2] + "'/><br/>");
+                    }
+                }
+                /* Increase how many times it's displayed photos */
+                iteration++;
+            } 
+
+            $(document).ready(function() {
+                loop(ROWS);
+                /* Display photos when window reaches the bottom */
+                if (i < photos.length) {
+                    $(window).scroll(function () {
+                        if ($(window).scrollTop() > $(document).height() - $(window).height() - 50) {
+                            loop(ROWS);
+                        }
+                    });
+                }
+            });
+        </script>
+        <style type="text/css"> 
+            img.normal {
+                width: 400px;
+            }
+            body {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container container_12">
+            <div class="grid_4" id = "col1">
+            </div>
+            <div class="grid_4" id = "col2">
+            </div>
+            <div class="grid_4" id = "col3">
+            </div>
+        </div>
+
+    </body>
+</html>

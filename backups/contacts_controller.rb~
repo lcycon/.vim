@@ -1,0 +1,180 @@
+class ContactsController < ApplicationController
+  before_filter :get_email
+  before_filter :get_client, :only => [:import, :create, :update,:destroy]
+
+  def import
+    contacts_xml = @client.get('https://www.google.com/m8/feeds/contacts/default/base?max-results=10000').to_xml
+    account_email = Email.find_by_email_and_accout_id(contacts_xml.elements.first.text, current_account.id)
+    if account_email
+      parsed_contacts = parse_contacts(contacts_xml, account_email)
+      redirect_to email_contacts_path(@email), :notice => "Contacts were synced successfully."
+    else
+      email = contacts_xml.elemetns.first.text
+      etag = contacts_xml.root.attributes['gb:etag']
+      account_email = Email.create(:email => email, :auth_token => session[:token], :etag => etag)
+      current_account.emails << account_email
+      parsed_contacts = parse_contacts(contacts_xml, account_email)
+      flash[:notice] = "Contacts were imported successfully."
+      redirect_to email_contacts_path(account_email), :notice => "Contacts were imported successfully")
+    end
+  end
+
+  # GET /contacts
+  # GET /contacts.json
+  def index
+    @contacts = Contact.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @contacts }
+    end
+  end
+
+  # GET /contacts/1
+  # GET /contacts/1.json
+  def show
+    @contact = Contact.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @contact }
+    end
+  end
+
+  # GET /contacts/new
+  # GET /contacts/new.json
+  def new
+    @contact = Contact.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @contact }
+    end
+  end
+
+  # GET /contacts/1/edit
+  def edit
+    @contact = Contact.find(params[:id])
+  end
+
+  def entry
+    entry = <<-EOF
+      <atom:entry xmlns:atom='http://www.w3.org/2005/Atom'
+          xmlns:gd='http://schemas.google.com/g/2005'>
+        <atom:category scheme='http://schemas.google.com/g/2005#kind'
+          term='http://schemas.google.com/contact/2008#contact' />
+        <atom:title type='text'>#{self.name}</atom:title>
+        <atom:content type='text'>Notes</atom:content>
+        <gd:email rel='http://schemas.google.com/g/2005#work'
+          address='#{self.email_address}' />
+      </atom:entry>
+    EOF
+    return entry
+  end
+
+  def set_auth_attributes(response)
+    self.etag = response.root.attributes['gd:etag']
+    self.google_id = response.elements.first.text
+  end
+  # POST /contacts
+  # POST /contacts.json
+  def create
+    @contact = Contact.new(params[:contact])
+
+    response = @client.post('https://www.google.com/m8/feeds/contacts/default/full', @contact.entry)
+    respond_to do |format|
+      if response.status_code == 201 
+        @contact.set_auth_attributes(response.to_xml)
+        @contact.save
+        format.html { redirect_to(email_contacts_path(@email), :notice => 'Contact was updated successfully') }
+        format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
+        format.json { render json: @contact, status: :created, location: @contact }
+      else
+        format.html { render edit_email_contact_path( @email, :alert => 'Contact was not created. Sync your contacts with Google, then try again.')}
+        format.html { render action: "new" }
+        format.json { render json: @contact.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /contacts/1
+  # PUT /contacts/1.json
+  def update
+    @contact = Contact.find(params[:id])
+    entry = @client.get(@contact.google_id).to_xml
+    updated_entry = @contact.set_entry_attributes(entry, params[:contact])
+    response = @client.put(@contact.google_id, updated_entry)
+
+    respond_to do |format|
+      if response.status_code == 200
+        params[:contact][:etag] = response.to_xml.root.attributes['gd:etag']
+        @contact.update_attributes(params[:contact])
+        format.html { redirect_to email_contacts_path(@email), :notice => "Contact was updated successfully." }
+      if @contact.update_attributes(params[:contact])
+        format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
+        format.json { head :ok }
+      else
+        format.html { redirect_to email_contacts_path(@email), :alert => "Contact was not updated. Sync your contacts with Google and try again." }
+      end
+    end
+  end
+
+  def set_entry_attributes(entry, attributes)
+    self.attributes = attributes
+    entry.root.attributes['gd:etag'] = self.etag
+    entry.element['title'].text = self.name
+    entry.elements['gd:email'].attributes['address'] = self.email_address
+    return entry
+  end
+
+  # DELETE /contacts/1
+  # DELETE /contacts/1.json
+  def destroy
+    @contact = Contact.find(params[:id])
+    entry = @client.get(@contact.google_id).to_xml
+    @client.headers['If-Match'] = @contact.etag # make sure don't nuke another client's updates
+    response = @client.delete(@contact.google_id)
+    respond_to do |format|
+      if response.status_code == 200
+        @contact.destroy
+        format.html { redirect_to (email_contacts_url(@email), :alert => "Contact was destroyed") }
+      else
+        #if the status code is not 200 it will throw an error and explain that sync is needed
+        #format.html { redirect_to(email_contacts_url(@email), :alert => "Contact was not destroyed") }
+    end
+  end
+
+  private #-------------------------------------------------------------------
+  def get_email
+    @email = Email.find(params[:email_id]) if params[:email_id]
+  end
+
+  def get_client
+    @client = GData::Client::Contacts.new
+    if @email && !@email.auth_token.blank?
+      @client.authsub_token = @email.auth_token
+    else
+      session[:client] = @client
+      @client.authsub_token = params[:token]
+      session[:token] = @client.auth_handler.upgrade
+      @client.authsub_token = session[:token]
+    end
+  end
+
+  def parse_contacts(contacts_xml, account_email)
+    contacts_xml.elements.each('entry') do |entry|
+      if entry.elements['gd:email']
+        email = entry.elements['gd:email'].attributes['address']
+        name = entry.elements['title'].text
+        google_id = entry.elements['id'].text
+        etag = entry.attributes['gd:etag']
+        found_contact = Contact.find_by_google_id(google_id)
+        if found_contact
+          found_contact.update_attributes(:name => name, :email_address => email, :etag => etag)
+        else
+          account_email.contacts << Contact.create(:name => name, :email_address => email, :etag => etag, :google_id => google_id)
+        end
+      end
+    end
+  end
+end

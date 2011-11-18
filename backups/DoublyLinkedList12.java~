@@ -1,0 +1,313 @@
+/**
+ * Project 02 DoublyLinkedList with generics
+ * CSE 12
+ * @author: Adam William Kuipers (A09511551)
+ * @version: 2011.08.16.01
+ */
+
+import java.util.*;
+
+class DoublyLinkedList12<T> implements List12<T> {
+    int _size; // Keeps count of the size of the list
+    Node<T> _head; // Will hold the address of the first node.
+    Node<T> _tail; // Will hold the address of the last node.
+
+    /**
+     * Class to create object type Node.
+     */
+    private static class Node<T> {
+        T _data;
+        Node<T> _next;
+        Node<T> _prev;
+    }
+
+    /**
+     * Iterator class.
+     */
+    private class DoublyLinkedList12Iterator implements Iterator<T> {
+
+        // Start position at initial dummy node.
+        private Node<T> _cursor =  _head;
+        // Last returned equals _head to show that hasNext() hasn't been called.
+        private Node<T> _lastReturned = _head;
+
+        /**
+         * Returns true if there are additional elements in the iterator.
+         * @return: true if the iterator has more elements. 
+         */
+        public boolean hasNext() {
+            return _cursor._next != _tail;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         * @return: the next element in the iteration.
+         * @throws: NoSuchElementException - iteration has no elements.
+         */
+        public T next() throws NoSuchElementException {
+            // Check if it has next. If not, throw exception.
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            } else {
+                // Iterator cursor
+                _cursor = _cursor._next;
+                // Show that next() has been called once.
+                _lastReturned = _cursor;
+                return _cursor._data;
+            }
+        }
+
+        /**
+         * Removes the underlying collection of the last element returns by the
+         * iterator (optional operators). This method can only be called once
+         * per call to next. The benefit of the iterator is unspecified if the
+         * underlying collection is modified while the iteration is in progress
+         * in any way other than by calling this method.
+         * @throw: UnsuportedOperationException - if the remove operation is 
+         *         not supported by this Iterator. 
+         * @throw: IllegalStateException - if the next method has not yet been
+         *         called, or the remove method has already been called after 
+         *         been called after the last call to the next method.
+         */
+        public void remove() throws IllegalStateException {
+            // Check to see if next() has only been called once at the current
+            // location.
+            if (_lastReturned._data == null) {
+               throw new IllegalStateException(); 
+            } else {
+                // Remove _lastReturned from list
+                _lastReturned._prev._next = _lastReturned._next;
+                _lastReturned._next._prev = _lastReturned._prev;
+                // Empty _lastReturned
+                _lastReturned._data = null;
+                // Decrement the number of nodes
+                _size--;
+            }
+        }
+    }
+
+    /**
+     * Contructor.
+     */
+    public DoublyLinkedList12() {
+        // Initialize dummy node.
+        _head = new Node<T>();
+        _tail = new Node<T>();
+
+        // Link head to tail
+        _head._next = _tail;
+
+        // Link tail to head
+        _tail._prev = _head;
+
+        // Set _size to 0, ignoring the dummy nodes.
+        _size = 0;
+    }
+
+    /**
+     * Construct iterator.
+     */
+    public Iterator<T> iterator() {
+        return new DoublyLinkedList12Iterator();
+    }
+
+    /**
+     * Adds object to the end of the list.
+     * @param: o is the new node added to the end of the list.
+     */
+    public void addToBack (T o) {
+        Node<T> tmp = new Node<T>(); // Placeholder for new T
+        tmp._data = o; // Set data to user input
+        tmp._next = _tail; // Have new node point to _tail dummy node.
+        tmp._prev = _tail._prev; // Have new node point to node before _tailI
+        // Have the node before the end dummy node point to the new node
+        _tail._prev._next = tmp; 
+        _tail._prev =tmp; // Have the end dummy node point to the new node.
+        _size++; // Incrament size;
+    }
+
+    /**
+     * Adds object to the beginning of the list.
+     * @param o is the new node added to the front of the list.
+     */
+    public void addToFront (T o) {
+        Node<T> tmp = new Node(); // Placeholder for new Object
+        tmp._data = o; // Set data to user input.
+        tmp._prev = _head; // Have tail point backwards to _head
+        tmp._next = _head._next; // Have tail point to what _head is pointing to.
+        // Have the node infront of first dummy node point to new node
+        _head._next._prev = tmp; 
+        _head._next = tmp; // Have the first dummy node point to the new node.
+        _size++; // Increment the size.
+    }
+
+    /** 
+     * Equivalent to addToBack.
+      * @param o the object to add to the list. 
+      */
+    public void add (T o) {
+        addToBack(o);
+    }
+
+    /** Removes and returns the element at the back of the list.
+      * @return the element that was removed from the back of the list.
+      * @throws NoSuchElementException if the list was empty.
+      */
+    public T removeBack() throws NoSuchElementException{
+        // Store element in node.
+        T element;
+        // If list is empty, throw exception. 
+        if (_size == 0) {
+            throw new NoSuchElementException("There are no elements in this" 
+                        + " list");
+        } else {
+            // Get element from node prior to _tail
+            element = _tail._prev._data;
+            // Remove node from list
+            _tail._prev._prev._next = _tail;
+            _tail._prev = _tail._prev._prev;
+            // Decrement size
+            _size--;
+            return element;
+        }
+    }
+
+    /** Removes and returns the element at the front of the list.
+      * @return the element that was removed from the front of the list.
+      * @throws NoSuchElementException if the list was empty.
+      */
+    public T removeFront() throws NoSuchElementException {
+        // T to store node.
+        T element;
+        // If list is empty, throw exception.
+        if (_size == 0) {
+            throw new NoSuchElementException();
+        } else {
+            // Store element from node infront of _head.
+            element = _head._next._data;
+            // Remove node from list.
+            _head._next._next._prev = _head;
+            _head._next = _head._next._next;
+            // Decrement size
+            _size--;
+            return element;
+        }
+    }
+
+    /** Removes the first occurrence (ordered from front to
+      * back, i.e., head to tail of the list) of the specified
+      * Object <tt>o</tt> from the list, if it exists. <tt>o</tt> may be null; if
+      * it is, then this method removes the first element in
+      * the list that is null. Otherwise, this method removes
+      * the first element in the list that <tt>equals()</tt>
+      * <tt>o</tt> (if any such element exists).
+      * @return <tt>true</tt> if an element was removed, or
+      * <tt>false</tt> otherwise.
+      */
+    public boolean remove(T o) {
+        // Set cursor to point at node after dummy node.
+        Node cursor = _head._next;
+        boolean bool = false;
+        // Loop through the list until cursor reaches tail or T is found
+        while (!cursor.equals(_tail) && bool == false){
+            if ( o == null) { // If we're checking for null.
+                if (cursor._data == null) { // Check if cursor equals null
+                    bool = true;
+                    _size--;
+                    cursor._prev._next = cursor._next;
+                    cursor._next._prev = cursor._prev;
+                } else {
+                    cursor = cursor._next;
+                }
+            } else { // If we're checking for any other object.
+                if ( cursor._data == null || !cursor._data.equals(o)) {
+                    cursor = cursor._next;
+                } else { // If cursor._data.equals(o)
+                    bool = true;
+                _size--;
+                cursor._prev._next = cursor._next;
+                cursor._next._prev = cursor._prev;
+                }
+            }
+        }
+        return bool;
+    }
+
+    /** 
+     * Removes all elements from the list. 
+     */
+    public void clear() {
+        _head._next = _tail;
+        _tail._prev = _head;
+        _size = 0;
+    }
+
+    /** Returns the element stored at location <tt>index</tt>, where index 0
+      * is the element stored at the head of the list and <tt>_size()-1</tt> is
+      * the index of the element at the tail of the list.
+      * @param index the index of the element to retrieve.
+      * @throws IndexOutOfBoundsException if the index is invalid.
+      * @return the Object at the specified index.
+      */
+    public T get (int index) throws IndexOutOfBoundsException {
+        // Start at node after _head
+        Node<T> tmp = _head._next;
+        // Check if index is out of bounds.
+        if (index > _size || index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        // Move to the node specified by user.
+        for (int i = 0; i < index; i++) {
+            tmp = tmp._next;
+        }
+        return tmp._data;
+    }
+    
+    /** Returns the number of elements (null or otherwise) currently stored in the
+      * list.
+      * @return the number of elements stored in the list.
+      */
+    public int size() {
+        return _size;
+    }
+
+    /** Returns whether the specified Object <tt>o</tt> is contained in the list. <tt>o</tt>
+      * may be null.
+      * @param o the object whose presence in the list should be determined.
+      * @return whether <tt>o</tt> is contained in the list.
+      */
+    public boolean contains(T o) {
+        // Point to object infront of _head.
+        Node<T> cursor = _head._next;
+        boolean bool = false;
+        // Loop while object is found through the list.
+        while (!cursor.equals(_tail) && bool == false) {
+            if ( o == null) { // If we're checking for null
+                if (cursor._data == null) { // Check if cursor equals null
+                    bool = true;
+                } else {
+                    cursor = cursor._next;
+                } 
+            } else { // If we're checking for any other Object.
+                // Ignore if cursor._data == null or if not equals to o
+                if (cursor._data == null || !cursor._data.equals(o)) { 
+                    cursor = cursor._next;
+                } else { // If cursor._data.equals(o)
+                    bool = true;
+                } 
+            }
+        }
+        return bool;
+    }
+
+    /**
+     * Method to print objects that are in each node
+     */
+    public void print() {
+        Node<T> cursor = _head._next;
+        while (cursor != _tail) {
+            System.out.println(cursor._data + " ");
+            cursor = cursor._next;
+        }
+    }
+}
