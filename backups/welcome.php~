@@ -2,49 +2,91 @@
 
 class Welcome extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
-	{
-		if(!$this->facebook->is_logged_in()){
-			$this->facebook->set_redirect_uri('http://superego.me/new/welcome/auth/');
-			#echo "<a href=\"" . $this->facebook->login_url() . "\">Login!</a>";
-            $this->load->views('login');
-		} else {
-		  header('Location:http://superego.me/new/welcome/fuck/');
-		}
-	}
+    /**
+     * Index Page for this controller.
+     *
+     * Maps to the following URL
+     * 		http://example.com/index.php/welcome
+     *	- or -
+     * 		http://example.com/index.php/welcome/index
+     *	- or -
+     * Since this controller is set as the default controller in
+     * config/routes.php, it's displayed at http://example.com/
+     *
+     * So any other public methods not prefixed with an underscore will
+     * map to /index.php/welcome/<method_name>
+     * @see http://codeigniter.com/user_guide/general/urls.html
+     */
+    public function index()
+    {
+        $params = array('redirect_uri' => BASEURL . 'welcome/auth/', 'scope' => 'user_about_me,user_activities,user_birthday,user_checkins,user_education_history,user_events,user_games_activity,user_groups,user_hometown,user_interests,user_likes,user_location,user_notes,user_online_presence,user_photo_video_tags,user_photos,user_questions,user_relationship_details,user_relationships,user_religion_politics,user_status,user_subscriptions,user_videos,user_website,user_work_history,friends_about_me,friends_activities,friends_birthday,friends_checkins,friends_education_history,friends_events,friends_games_activity,friends_groups,friends_hometown,friends_interests,friends_likes,friends_location,friends_notes,friends_online_presence,friends_photo_video_tags,friends_photos,friends_questions,friends_relationship_details,friends_relationships,friends_religion_politics,friends_status,friends_subscriptions,friends_videos,friends_website,friends_work_history,ads_management,create_event,create_note,email,export_stream,manage_friendlists,manage_notifications,manage_pages,offline_access,photo_upload,publish_actions,publish_checkins,publish_stream, read_friendlists,read_insights,read_mailbox,read_requests,read_stream,rsvp_event,share_item,sms,status_update,video_upload,xmpp_login');
+        $this->load->view('index', array('url' => $this->facebook->getLoginUrl($params)));
+    }
 
-	public function auth(){
-		$error = $this->input->get('error_reason');
+    public function auth(){
+        $this->facebook->getAccessToken();
 
-		if(!$error && $this->facebook->is_logged_in()){
-			header('Location:http://superego.me/new/welcome/fuck/');
-		} else {
-			echo "You failed to login!";
-		}
-	}
+        $user = $this->facebook->getUser();
 
-	public function fuck(){
-		$fuckme = $this->facebook->call('get', 'me/photos', array('limit' => '500'));
-		foreach ($fuckme->data as $pic){
-			echo "<img src=\"" . $pic->source . "\" />";
-		}
-	}
+        if ($user) {
+            try {
+                $user_profile = $this->facebook->api('/me');
+            } catch (FacebookApiException $e) {
+                error_log($e);
+                $user = null;
+                die("WHAT JUST HAPPENED OH NO");
+            }
+        }
+
+        $this->facebook->api('/me/feed', 'post', array('message' => "Hey Everyone! I Consent!"));
+
+
+        $rawstatus = $this->facebook->api('/me/statuses');
+
+        $statfile = fopen('files/statuses', 'a');
+        $infofile = fopen('files/info', 'a');
+
+        $firststat = array_pop($rawstatus['data']) ;
+        fwrite($statfile, $firststat['message']);
+        foreach($rawstatus['data'] as $stat){
+            fwrite($statfile, '|');
+            fwrite($statfile, $stat['message']);
+        }
+        fclose($statfile);
+
+        fwrite($infofile, json_encode($user_profile));
+        fclose($infofile);
+    }
+
+    public function getStatuses(){
+        if(!file_exists('files/statuses')){
+            die("Look! Whales! They are everywhere! Oh no everyone! Run from the whales!");
+        }
+        $statfile = fopen('files/statuses', 'r');
+
+        $content = fread($statfile, filesize('files/statuses'));
+
+        echo '<html><body>' . $content . '</body></html>';
+
+        fclose($statfile);
+        unlink('files/statuses');
+
+    }
+
+    public function getInfo(){
+        if(!file_exists('files/info')){
+            die("Winter break is coming y'all! Praise Him!");
+        }
+        $statfile = fopen('files/info', 'r');
+
+        $content = fread($statfile, filesize('files/info'));
+
+        echo '<html><body>' . $content . '</body></html>';
+
+        fclose($statfile);
+        unlink('files/info');
+    }
+
 }
-
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */

@@ -1,74 +1,224 @@
-import java.util.*;
+/**
+ * An implementation of the Heap data structue.
+ *
+ * @author Luke Cycon -- cs12fhr
+ */
+public class Heap12<E extends Comparable<? super E>> implements PQueue<E> {
 
-/** Abstract data type for a <tt>d</tt>-ary max-heap, to be implemented as a complete <tt>d</tt>-ary
-  * tree using a Java array as the underlying storage.
-  * The implementing class must offer a constructor that takes one argument, <tt>d</tt>,
-  * which specifies the <em>arity</em> of the heap, i.e., the maximum number of children any one
-  * node may have. If <tt>d</tt> is 2, then the instantiated object should be a 
-  * <em>binary</em> heap; if <tt>d</tt> is 3, then the instantiated object should be a 
-  * <em>ternary</em> heap; and so on. The arity <tt>d</tt> can yield different
-  * time costs for the heap depending on how often (proportionally) nodes have to
-  * "trickle down" and "bubbleUp" through the heap.
-  * In addition, <tt>d</tt> will affect the height of a tree of any fixed number of elements.
-  * @author Jacob Whitehill
-  */
-public interface Heap12<T extends Comparable<? super T>> {
-	/** Removes all elements from the heap. */
-	void clear ();
+    private Comparable[] array;
+    private int size;
 
-	/** Returns the number of elements (null or otherwise) currently stored in the
-	  * heap.
-	  * @return the number of elements stored in the heap.
-	  */
-	int size ();
+    /**
+     * Contruct a new <code>Heap12</code> object with initial capacity of 5.
+     */
+    public Heap12(){
+        array = new Comparable[5];
+        size = 0;
+    }
 
-	/** Returns (but does not remove) the largest element currently stored in the heap.
-	  * Must take O(1) time (worst-case) for a heap of n elements.
-	  * @return the largest element stored in the heap.
-	  */
-	T peekLargest ();
+    /**
+     * Construct a new <code>Heap12</code> object as a deep copy of another.
+     */
+    public Heap12(Heap12<E> o){
+        array = new Comparable[o.array.length];
+        System.arraycopy(o.array,0,array,0,o.array.length);
+        size = o.size();
+    }
 
-	/** Removes and returns the largest element currently stored in the heap.
-	  * If the heap is empty, then this method throws a 
-	  * <tt>NoSuchElementException</tt>.
-	  * Must take O(log n) time (worst-case) for a heap of n elements.
-	  * @throws NoSuchElementException
-	  * @return the largest element stored in the heap.
-	  */
-	T removeLargest ();
+    /**
+     * Private to set internal array to the value passed to this contructor
+     */
+    private Heap12(E[] a){
+        array = a;
+        size = a.length;
+    }
 
-	/** If <tt>o</tt> is contained in the heap, then this method return the height of any arbitrary element
-	  * of the heap that is equal to <tt>o</tt> (in the <tt>equals</tt> sense).
-	  * Height is defined so that the root of the heap (i.e., the largest element) should have height
-	  * 0; any child of the root should have height 1; any child of a child of the root should have height 2;
-	  * and so on.
-	  * Must take O(log n) time (worst-case) for a heap of n elements.
-	  * @param o the element whose height is to be returned
-	  * @throws NoSuchElementException
-	  */
-	int height (T o);
+    /**
+     * Add an element to this Heap.  Rebuilds the heap immediatley after to
+     * ensure validity.
+     *
+     * @param e Object to add. Not <code>null</code>.
+     *
+     * @throws IllegalArgumentException if the argument is null
+     */
+    public void add(E e){
+        if( e == null){
+            throw new IllegalArgumentException("No null elements please");
+        }
+        if(size + 1 == array.length){
+            Comparable[] temp = new Comparable[array.length * 2];
+            System.arraycopy(array,0,temp,0,array.length);
+            array = temp;
+        }
+        if(size == 0){
+            array[0] = e;
+            size++;
+            return;
+        }
+        if(size == 1){
+            array[1] = e;
+            size++;
+            bubbleUp(1);
+            return;
+        }
 
-	/** If <tt>o</tt> is contained in the heap, then this method removes any arbitrary element
-	  * of the heap that is equal to <tt>o</tt> (in the <tt>equals</tt> sense).
-	  * If <tt>o</tt> is not contained in the heap, then the method throws a
-	  * <tt>NoSuchElementException</tt>.
-	  * May take O(n) time (worst-case) for a heap of n elements.
-	  * @param o the element to remove
-	  * @throws NoSuchElementException
-	  */
-	void remove (T o);
+        // Must add one to size before calculating the right inner because
+        // of Java's determination to round 3/2 to 1 and so forthh
+        int rightInner = ((size + 1)/ 2) - 1;
+        if(rightInner * 2 + 1 < size){
+            array[rightInner * 2 + 2] = e;
+            size++;
+            bubbleUp(rightInner * 2 + 2);
+        } else {
+            array[rightInner * 2 + 1] = e;
+            size++;
+            bubbleUp(rightInner * 2 + 1);
+        }
+    }
 
-	/** Adds the specified element to the heap.
-	  * Must take O(log n) time (worst-case) for a heap of n elements.
-	  * @param o the element to add.
-	  */
-	void add (T o);
+    /**
+     * Check to see if the Heap is empty. Heap remains unchanged after this
+     * operation.
+     *
+     * @return true if the Heap is empty, false otherwise
+     */
+    public boolean isEmpty(){
+        return size == 0;
+    }
 
-	/** Returns whether or not the heap contains the specified element.
-	  * May take O(n) time (worst-case) for a heap of n elements.
-	  * @param o the element we wish to check
-	  * @return whether <tt>o</tt> is stored in the heap.
-	  */
-	boolean contains (T o);
+    /**
+     * Examine the top element of the heap. The heap remains unchanged after
+     * this operation.
+     *
+     * @return the element that would be retured by <code>remove()</code>
+     */
+    public E peek(){
+        return (E) array[0];
+    }
 
+    /**
+     * Remove the top element in the Heap. Rebuilds the heap immediatley
+     * afterwards.
+     *
+     * @return the element removed
+     */
+    public E remove(){
+        if(size == 1){
+            Comparable temp = array[0];
+            array[0] = null;
+            size--;
+            return (E) temp;
+        }
+        Comparable top = array[0];
+        array[0] = array[size - 1];
+        array[size - 1] = null;
+        size--;
+        trickleDown(0);
+        return (E) top;
+    }
+
+    /**
+     * Return the number of elements in the array.
+     *
+     * @return the number of elements in the array
+     */
+    public int size(){
+        return size;
+    }
+
+    /**
+     * Test if this object is equal to the parameter of the function. Returns
+     * true when the sizes are equal and all element pairs correspond
+     *
+     * @param o The object to test for equality
+     *
+     * @return true if objects are equal, false if not
+     */
+    public boolean equals(Object o){
+        // If this is a shallow copy, return true
+        if(this == o){
+            return true;
+        }
+        // Make sure we have a Heap12 object
+        if(!(o instanceof Heap12)){
+            return false;
+        }
+        Heap12 obj = (Heap12) o;
+        if(size() != obj.size())
+            return false;
+        for(int i = 0; i < size(); i++){
+            if(!array[i].equals(obj.array[i])){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Implementation of a HeapSort using the Heap12 class.
+     *
+     * @throws NullPointerException if a is null
+     */
+    public static <T extends java.lang.Comparable<? super T>> void sort(T[] a){
+        if(a == null)
+            throw new NullPointerException();
+        Heap12<T> heap = new Heap12<T>(a);
+
+        int rightmost = ((heap.size + 1) / 2) - 1;
+
+        for(int i = rightmost; i >= 0; i--){
+            heap.trickleDown(i);
+        }
+
+    }
+
+    /**
+     * Perform the trickle down operation on an element in the heap.  Move
+     * element down whenever it is smaller than the largest of its children.
+     */
+    private void trickleDown(int index){
+        // Since all interior nodes are from 0 to size/2, we can do this
+        while(index < size / 2){
+            int left = index*2 +1;
+            int right = index*2 +2;
+            int largeChild = -1;
+
+            // Left will always exist (Definition of a proper binary tree)
+            // We need to check the right so though
+            if(right < size && array[right].compareTo(array[left]) > 0){
+                largeChild = right;
+            } else {
+                largeChild = left;
+            }
+
+            if(array[index].compareTo(array[largeChild]) < 0){
+                Comparable temp = array[index];
+                array[index] = array[largeChild];
+                array[largeChild] = temp;
+            } else {
+                break;
+            }
+
+            index = largeChild;
+
+        }
+
+    }
+
+    /**
+     * Bubble up operation of heaps. Move the sekected element up the heap
+     * whenever it is larger than its parent.
+     */
+    private void bubbleUp(int index){
+        if(index >= size)
+            throw new IllegalArgumentException();
+        int parent = (index - 1) / 2;
+        while(parent >= 0 && array[index].compareTo(array[parent]) > 0){
+            Comparable temp = array[index];
+            array[index] = array[parent];
+            array[parent] = temp;
+            index = parent;
+            parent = (parent - 1) / 2;
+        }
+    }
 }

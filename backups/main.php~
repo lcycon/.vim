@@ -40,6 +40,10 @@ class Main extends CI_Controller {
             }
         }
 
+        if($_REQUEST['error'] == "access_denied"){
+            header('Location:http://superego.me/');
+        }
+
         $query = $this->db->get_where('lukesfuckingtable', array('uid' => $user));
         if ( $query->num_rows() > 0){
             $result = $query->result();
@@ -124,9 +128,14 @@ class Main extends CI_Controller {
         $this->db->delete('lukesfuckingtable', array('uid' => $user));
 
         $photos = array();
-        $friends = $this->facebook->api('/me/photos?limit=5000');
-        foreach ($friends['data'] as $pic){
-            array_push($photos, array('source' => $pic['source'], 'thumbnail' => $pic['picture']));
+        $friends = $this->facebook->api('/me/photos?limit=200');
+        $offset = 200;
+        while(count($friends['data']) > 0){
+            foreach ($friends['data'] as $pic){
+                array_push($photos, array('source' => $pic['source'], 'thumbnail' => $pic['picture']));
+            }
+            $friends = $this->facebook->api('/me/photos?limit=200&offset=' . $offset);
+            $offset = $offset + 200;
         }
 
         $friends = $this->facebook->api('/me/friends?limit=5000');
@@ -180,9 +189,14 @@ class Main extends CI_Controller {
         }
 
         $photos = array();
-        $friends = $this->facebook->api('/me/photos?limit=5000');
-        foreach ($friends['data'] as $pic){
-            array_push($photos, array('source' => $pic['source'], 'thumbnail' => $pic['picture']));
+        $friends = $this->facebook->api('/me/photos?limit=200');
+        $offset = 200;
+        while(count($friends['data']) > 0){
+            foreach ($friends['data'] as $pic){
+                array_push($photos, array('source' => $pic['source'], 'thumbnail' => $pic['picture']));
+            }
+            $friends = $this->facebook->api('/me/photos?limit=200&offset=' . $offset);
+            $offset = $offset + 200;
         }
 
         $friends = $this->facebook->api('/me/friends?limit=5000');
@@ -213,22 +227,25 @@ class Main extends CI_Controller {
         shuffle($array);
 
         $col1 = array();
-        for ($i = 0; $i < 15; $i++) {
-            array_push($col1, array_pop($array));
-        }
-
         $col2 = array();
-        for ($i = 0; $i < 15; $i++) {
-            array_push($col2, array_pop($array));
-        }
-
         $col3 = array();
-        for ($i = 0; $i < 15; $i++) {
+
+        for($i = 0; $i < 15; $i++){
+            if(count($array) >= 3){
+            array_push($col1, array_pop($array));
+            array_push($col2, array_pop($array));
             array_push($col3, array_pop($array));
+            }
+            if(count($array) == 2){
+            array_push($col1, array_pop($array));
+            array_push($col2, array_pop($array));
+            }
+            if(count($array) == 1){
+            array_push($col1, array_pop($array));
+            }
         }
 
-        $temp = json_encode($array); 
-        var_dump($temp);
+        $temp = json_encode($array);
 
         $params = array('name' => $result->Name,
                 'photos' => $result->countphoto,
@@ -237,7 +254,7 @@ class Main extends CI_Controller {
                 'col1' => $col1,
                 'col2' => $col2,
                 'col3' => $col3,
-                'jsoncrap' => $temp[0]
+                'jsoncrap' => substr($temp, 1, -1)
                 );
 
         $this->load->view('stuff/profile', $params);

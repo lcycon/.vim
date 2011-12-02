@@ -13,11 +13,12 @@
 
 <script type="text/javascript">
 
-var iteration = 0; // Iteration through the loop
+var iteration = 1; // Iteration through the loop
 var i = 0; // Iterator
 var j = 0; // Iterator 2 
 var ROWS = 15; // Rows of photos
-var images = 45;
+var COLS = 3
+var images = ROWS * COLS;
 var columns = 3;
 
 /* Image arrays */
@@ -31,19 +32,31 @@ $(document).ready(function() {
     if (i < photos.length) {
         $(window).scroll(function () {
             if ($(window).scrollTop() > $(document).height() - $(window).height() - 10) {
-                alert("penis");
                 loop(ROWS);
             }
         });
     }
+
+    /*$(".egoimg a").onclick(function() {
+        var largePath = $(this).attr("href");
+        var largeAlt = $(this).attr("tittle");
+        $("#largeImg".attr({ src: largePath, alt: largeAlt });
+        }); */
 });
 
 function popimg(url){
 	var data="<img src=\""+url+"\">";
 	$('#popimg').html(data);
-centerPopup();
-		
-		loadPopup();	
+    centerPopup();
+    loadPopup();	
+}
+
+function poparray(row, col) {
+    var index = row + col
+    var data = "<img class = 'egoimg' src = \"" + photos[index]['source'] + "\" />";
+    $('#popimg').html(data);
+    centerPopup();
+    loadPopup();
 }
 		
 function loop(rows) {
@@ -62,25 +75,27 @@ function loop(rows) {
         }
     }
 */ 
-    
-    for (i = images * iteration; i < images * (iteration + 1); i += 1) {
-        if ( i < photos.length && i < rows * (iteration + 1)){
-            $('#column1').append("<a href=\'javascript:popimg(\"photos[i + 0][\'source\']\")\'><img src = '" + photos[i + 0]['source'] + " class = 'egoimg' '/><br/>");
+    while (true) {
+        if ( i < photos.length && i < rows * (iteration) && i < images * iteration){
+            $('#column1').append("<a href='javascript:popimg(\"" + photos[i]['source'] + "\")'><img  src='" + photos[i]['source'] + "' class='egoimg' /></a>");
         } else {
             break;
         }
-        /*
-        if ( i + 1 < photos.length && i < rows * (iteration + 1)){
-            $('#column2').append("<img class = 'normal' src = '" + photos[i + 1]['source'] + "'/><br/>");
+        i++;
+        if ( i < photos.length && i < rows * (iteration) && i < images * iteration){
+            $('#column2').append("<a href='javascript:popimg(\"" + photos[i]['source'] + "\")'><img  src='" + photos[i]['source'] + "' class='egoimg' /></a>");
         } else {
             break;
         }
-        if (i + 2 < photos.length && i < rows * (iteration + 1)){
-            $('#column3').append("<img class = 'normal' src = '" + photos[i + 2]['source'] + "'/><br/>");
+        i++;
+        if (i < photos.length && i < rows * (iteration ) && i < images * iteration){
+            //$('#column3').append("<img class = 'egoimg' src = '" + photos[i + 2]['source'] + "'/><br/>");
+            $('#column3').append("<a href='javascript:popimg(\"" + photos[i]['source'] + "\")'><img  src='" + photos[i]['source'] + "' class='egoimg' /></a>");
         } else {
             break;
         }
-     */
+        i++;
+     
     }
     
     /* Increase how many times it's displayed photos */
@@ -101,13 +116,19 @@ function loop(rows) {
 <div id="left">
 <div id="headerDivider"></div>
 	
-<?php echo img(array('src' => 'res/img/superego_homepage_logo.png', 'class' => 'logo', 'width' => '150px')); ?>
+<a href="http://superego.me/"><?php echo img(array('src' => 'res/img/superego_homepage_logo.png', 'class' => 'logo', 'width' => '150px')); ?></a>
 	<h3>
 Your special place in the cloud.</h3>
 <img class="profile" src="https://graph.facebook.com/<?php echo $uid; ?>/picture?type=large">
 
-<div id="egoname"><?php echo $name; ?><h3>tagged in <?php echo $photos; ?> photos<br><?php echo $friends; ?> friends</h3></div>
+<div id="egoname"><?php echo $name; ?><h3>tagged in <?php echo $photos; ?> photos<br><?php echo $friends; ?> friends</h3>
+
+<div id="poster"><?php echo img(array('src' => 'res/img/poster.png', 'width' => '105px')); ?><br>the Superego poster <br>it's all about you...<br />Coming soon</div></div>
 </div>
+
+
+
+
    
    <div id="right">
    <div class="column" id="column1">
@@ -123,7 +144,7 @@ Your special place in the cloud.</h3>
      <div class="column" id="column2">
     <?php foreach ($col2 as $item):?>
 
-    <!--   <a href='javascript:popimg("<?php echo $item->source; ?>")'><img  src="<?php echo $item->source; ?>" class="egoimg" /></a> -->
+       <a href='javascript:popimg("<?php echo $item->source; ?>")'><img  src="<?php echo $item->source; ?>" class="egoimg" /></a> 
 
     <?php endforeach;?>   
     <div class="clearIt"></div>
@@ -133,7 +154,7 @@ Your special place in the cloud.</h3>
     <div class="column" id="column3">
     <?php foreach ($col3 as $item):?>
 
-    <!-- <a href='javascript:popimg("<?php echo $item->source; ?>")'><img  src="<?php echo $item->source; ?>" class="egoimg" /></a> -->
+        <a href='javascript:popimg("<?php echo $item->source; ?>")'><img  src="<?php echo $item->source; ?>" class="egoimg" /></a>
 
     <?php endforeach;?>   
     <div class="clearIt"></div>
@@ -144,7 +165,7 @@ Your special place in the cloud.</h3>
    
 <div id="logo">
 <h3> a project by</h3>
-   <?php echo img(array('src' => '/res/img/socialps.png', 'id' => 'sps')); ?>
+   <a href="http://socialprintstudio.com/"><?php echo img(array('src' => '/res/img/socialps.png', 'id' => 'sps')); ?></a>
    </div>
 
 <div id="headerwrap">
