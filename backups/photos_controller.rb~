@@ -1,0 +1,99 @@
+require 'open-uri'
+
+class Api::PhotosController < ApplicationController
+
+  def get_photo
+
+    if params != nil
+      limit = params[:count].to_i
+    else
+      limit = 0
+    end
+
+    if limit > 0
+      @photos = Photo.where(:printable => true).limit(limit)
+    else
+      @photos = Photo.where(:printable => true, :printed => false).order("photos.priority DESC").limit(1)
+    end
+
+    result = []
+    @photos.each do |i|
+      photo = {
+        :source => i.source,
+        :account => i.account,
+        :url => i.url,
+        :style => i.respond_to?("style") ? i.style : nil}
+      result << photo
+      i.update_attribute(:printed, true)
+    end
+
+    render :json => result
+
+  end
+
+  def add_photo
+
+    if params != nil
+      url = params[:name].to_s
+    else
+      puts "Uhhhhh...."
+    end
+
+    file = open(url)
+
+    p = Photo.create!(:source => 'inperson',
+                      :account => name,
+                      :url => url,
+                      :printable => true,
+                      :printed => false,
+                      :priority => 10,
+                      :img => file)
+
+    p.url = p.img.url
+    p.save
+
+    render :json => {:status => 'Added'}
+
+  end
+
+  def get_inperson_photos
+    @photos = Photo.where(:source => 'inperson')
+    result = []
+    @photos.each do |i|
+      photo = {
+        :source => i.source,
+        :account => i.account,
+        :url => i.url,
+        :style => i.respond_to?("style") ? i.style : nil}
+      result << photo
+    end
+    render :json => result
+  end
+
+  def get_twitter_photos
+    if params != nil
+      limit = params[:count].to_i
+    else
+      limit = 0
+    end
+
+    if limit > 0
+      @photos = Photo.where(:source => 'twitter', :printable => true).limit(limit)
+    else
+      @photos = Photo.where(:source => 'twitter', :printable => true, :printed => false).order("photos.priority DESC").limit(1)
+    end
+
+    result = []
+    @photos.each do |i|
+      photo = {
+        :source => i.source,
+        :account => i.account,
+        :url => i.url,
+        :style => i.respond_to?("style") ? i.style : nil}
+      result << photo
+      i.update_attribute(:printed, true)
+    end
+
+    render :json => result
+  end
+end

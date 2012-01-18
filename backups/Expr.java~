@@ -1,0 +1,25 @@
+public class Expr extends ASTNode{
+
+    private Expr(ASTNode... args){
+        super(args);
+    }
+
+    public static Expr parse(java.lang.String s){
+        s = s.trim();
+        ASTNode res = Assignment.parse(s);
+        if(res != null){
+            return new Expr(res);
+        }
+        res = Operation.parse(s);
+        if(res != null){
+            return new Expr(res);
+        }
+        return null;
+    }
+
+    public double eval(java.util.Map<java.lang.String,java.lang.Double> symtab){
+        return getChild(0).eval(symtab);
+    }
+
+
+}

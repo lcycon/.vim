@@ -1,0 +1,214 @@
+<?php
+    if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 8")) {header("X-UA-Compatible: IE=7");}
+    if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 9")) {header("X-UA-Compatible: IE=7");}
+    if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 10")) {header("X-UA-Compatible: IE=7");}
+    $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+?>
+
+<html>
+<head>
+
+<script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
+
+<title>Marc Jacobs</title>
+<meta name="title" content="Marc Jacobs"/>
+<meta name="description" content="Join the MJ Family This Holiday - Tag Instagram, Twitter &amp; Foursquare Photos 
+#MarcFam" />
+ <meta name="keywords" content="marcjacobs.com, mark Jacobs, marc Jakobs, designer fashion, designer clothes, shirts, designer dresses, pants, shoes, bags, eyewear, glasses, jewelry, perfume, designer fragrance, fur, fashion accessories" />
+
+<link type="image/x-icon" href="http://www.marcjacobs.com/content/images/favicon_201104.ico" rel="shortcut icon" />
+
+<link rel="stylesheet" href="css/singleimageview2.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/header.css" type="text/css">
+<link rel="stylesheet" href="css/grid.css" type = "text/css" />
+<link rel="stylesheet" href="css/singleimage.css" type ="text/css" />
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<?php
+    if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 7")) {
+        echo "<style>.grid_2{float:left}</style>";
+        echo "<script type = 'text/javascript'>singleImageViewFix = -100;$.fx.off = true;</script>";
+        echo '<link rel = "stylesheet" type = "text/css" href = "css/ieFix.css" />';    
+    } else if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 8")) {
+        echo "<style>.grid_2{float:left}</style>";
+        echo "<script type = 'text/javascript'>singleImageViewFix = -100;$.fx.off = true;</script>";
+        echo '<link rel = "stylesheet" type = "text/css" href = "css/ieFix.css" />';    
+    } else if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 9")) {
+    	echo "<style>.grid_2{float:left}</style>";
+    	echo "<script type = 'text/javascript'>singleImageViewFix = -100;$.fx.off = true;</script>";
+    	echo '<link rel = "stylesheet" type = "text/css" href = "css/ieFix.css" />';	
+    } else if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE 10")) {
+    	echo "<style>.grid_2{float:left}</style>";
+    	echo "<script type = 'text/javascript'>singleImageViewFix = -100;$.fx.off = true;</script>";
+    	echo '<link rel = "stylesheet" type = "text/css" href = "css/ieFix.css" />';	
+    }else if(strpos($_SERVER['HTTP_USER_AGENT'],'Firefox')){
+        echo '<link rel="stylesheet" href="css/stylesFF.css" type = "text/css" />';
+    }
+    else{
+        echo '<link rel="stylesheet" href="css/styles.css" type = "text/css" />';
+    }
+    
+    if(strpos($_SERVER['HTTP_USER_AGENT'],'iPad')){
+        echo '<link rel="stylesheet" href="css/animateIpad.css" type = "text/css" />';
+        echo "<script type = 'text/javascript'>$.fx.off = true;</script>";
+    }else{
+        echo '<link rel="stylesheet" href="css/animateZ.css" type="text/css" />';
+    }
+    
+    
+?>
+
+
+<!-- js imports -->
+<script type="text/javascript" src="js/jquery.scrollTo-1.4.2.js"></script>
+<script type="text/javascript" src="js/imageLayouts.js"></script>
+<script type="text/javascript" src="js/specialDiv.php"></script>
+<script type="text/javascript" src="js/core.js"></script>
+<script type="text/javascript" src="js/base64.js"></script>
+<script type = "text/javascript">
+
+    /* Init */
+    $(document).ready(function() {
+        // Hide Grid
+        singleImageViewFix = 775;
+        $grid = $('.grid');
+        $('.grid_container').hide();
+        $('#bottomlanding').hide();
+
+        // Start pre-loading images
+        bufferImgs();
+        getCount();
+        $("#blackout").click(closeExpandedDiv);
+                
+        $(window).scroll(function() { setTimeout(drawLines, 0); });
+
+        // Landing page transitions
+        $('#downbutton').click(function(){
+            buttonClicked = true;
+            $(".clickableimg").removeClass("hidden");
+            $(".mosaic").removeClass("hidden");
+            $(".videoimg").removeClass("hidden");
+            $(".bigimg").removeClass("hidden");
+
+            $(".grid_container").animate({
+                    //height: $("#grid_container").height() + 600
+            }, 1000);
+            $('#mainSingleContainer').animate({
+                "margin-top": -$("#mainSingleContainer").outerHeight()
+            }, 1000);
+            $('.grid_container').show();
+            $('#bottomlanding').show();
+            $('#downbutton').addClass("hidden");
+        });
+    });
+        
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27541901-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+    <?php include('php/header.php'); ?>
+
+    <div id = "mainSingleContainer">
+
+
+    <div id='leftContainer'>
+    <img class='marcfam' src='headers/hashtag.png'>
+    <img class='join' src='imgs/join2.png'>
+    <img id="familyphoto" src='imgs/familyphoto.png'>
+    <img class='join' src='imgs/tagyourphotos.png'>
+
+
+    <div id="arrowContainer">
+    <a class="downbutton" id="downbutton"><img id="viewgallery" src='imgs/viewgallery.png'>
+    <img class="arrowbutton"  src='imgs/arrow_glow.png'></a>
+    </div> 
+
+
+    </div>
+
+
+    <div id="singleContainer">
+    <img class="singleimg" src="<?php echo $photo->url; ?>">
+    <div id="imginfo">
+
+
+    <h3>
+    photo shared via <?php echo $photo->source; ?>
+    </h3><br>
+
+    <img class="profileimg"  src="<?php echo $photo->profile_picture; ?>">
+    <h2>
+    <?php echo $photo->user; ?>
+    </h2>
+    <br>
+    <div id="caption">
+    <?php echo $photo->content; ?>
+    </div>
+
+    <div class="clearIt"></div>
+        <div id="tellYourFriendsTop">
+                    <div id="twitterContainer">     
+                    
+                        <a href="http://twitter.com/share" class="twitter-share-button" data-text="I love the #MarcFam holiday photo album" data-related="marcjacobsintl:Marc Jacobs International,socialps:Social Print Studio" data-url="<?php echo $url ?>" data-counturl="<?php echo $url ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+                    </div>
+                    <div id="facebookContainer">
+                        <iframe src="//www.facebook.com/plugins/like.php?href=<?php echo $url;?>&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21&amp;appId=160548430646821" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:80px; height:21px;" allowTransparency="true"></iframe>         </div>
+                    
+                    <div id="tumblrContainer">
+                    <a href="http://www.tumblr.com/share/photo?source=<?php echo urlencode($photo->url); ?>&caption=<?php echo urlencode($photo->content); ?>&clickthru=<?php echo urlencode($url); ?>" title="Share on Tumblr" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:61px; height:20px; background:url('http://platform.tumblr.com/v1/share_2.png') top left no-repeat transparent;">Share on Tumblr</a>
+                    </div>
+                    
+            </div>
+        </div>
+    </div>
+
+        
+
+        
+        <div class="clearIt"></div>
+    </div><!--mainSingleContainer-->
+    <div class = "container container_12">
+        <div class ="grid_container">
+                    <div class ="grid">
+                    </div>
+                </div>
+                <div class="footer"></div>
+                <div class="hidden screenFader" id = "blackout"></div>
+                <div class="bottomlanding hidden" id="bottomlanding"></div>
+
+    </div>
+
+    </div>
+    <script type="text/javascript">
+var _sf_async_config={uid:31738,domain:"marcfam.marcjacobs.com"};
+(function(){
+  function loadChartbeat() {
+    window._sf_endpt=(new Date()).getTime();
+    var e = document.createElement('script');
+    e.setAttribute('language', 'javascript');
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src',
+       (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+       "js/chartbeat.js");
+    document.body.appendChild(e);
+  }
+  var oldonload = window.onload;
+  window.onload = (typeof window.onload != 'function') ?
+     loadChartbeat : function() { oldonload(); loadChartbeat(); };
+})();
+
+</script>
+</body>
+</html>

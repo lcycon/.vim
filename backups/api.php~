@@ -1,0 +1,35 @@
+<?php if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
+
+class API extends CI_Controller {
+
+	public function track($activity, $location) {
+		$this->mongo_db->insert('test', array("activity" => $activity,
+			"location" => $location,
+			"timestamp" => date(DATE_ATOM,
+			time())));
+	}
+
+	// Creates a new account. Performs no error checking (for now), and just adds
+	// the user into the database.
+	// $firstname: First name
+	// $lastname: Last name
+	// $username: A unique username
+	// $password: Password
+	public function newUser($firstname, $lastname, $username, $password, $email) {
+		/*echo $firstname;
+		 echo $lastname;
+		 echo $username;
+		 echo $password;
+		 echo $email;*/
+		$user = array(
+			"firstname" => $firstname,
+			'lastname' => $lastname,
+			'username' => $username,
+			'password' => $password,
+			'email' => $email
+		);
+		$this->mongo_db->insert('users', $user);
+		echo("Done!");
+	}
+}

@@ -1,8 +1,0 @@
-class Contact
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  embedded_in :user
-  field :name, type => string
-  field :email, type => string
-  field :phone, type => string
-end

@@ -1,0 +1,52 @@
+public class Operation extends ASTNode{
+
+    private char operation;
+
+    private Operation(char  op, ASTNode... nodes){
+        super(nodes);
+        operation = op;
+    }
+
+    public double eval(java.util.Map<java.lang.String,java.lang.Double> symtab){
+        if(operation == '+'){
+            return getChild(0).eval(symtab) + getChild(1).eval(symtab);
+        } else if(operation == '-'){
+            return getChild(0).eval(symtab) - getChild(1).eval(symtab);
+        } else if(operation == 'n'){
+            return getChild(0).eval(symtab);
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public static Operation parse(java.lang.String s){
+        ASTNode res = null;
+        res = Term.parse(s);
+        if(res != null){
+            return new Operation('n', res);
+        }
+        char[] array = s.toCharArray();
+        int bracketSets = 0;
+        for(int i = array.length - 1; i >= 0; i--){
+            if(array[i] == ')'){
+                bracketSets++;
+            } else if(array[i] == '('){
+                bracketSets--;
+            } else if(bracketSets == 0 && (array[i] == '+' || array[i] == '-')){
+                if(array[i - 1] == '-' || array[i - 1] == '+'){
+                    continue;
+                }
+                ASTNode resright = null;
+                res = Operation.parse(s.substring(0, i).trim());
+                resright = Term.parse(s.substring(i + 1, array.length));
+                if(res != null && resright != null){
+                    return new Operation(array[i], res, resright);
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+}

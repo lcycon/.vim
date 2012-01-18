@@ -1,5 +1,0 @@
-class Email
-  include Mongoid::Document
-  belongs_to :account
-  has_many :contacts, :dependent => :destroy
-end

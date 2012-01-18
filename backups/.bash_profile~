@@ -1,8 +1,0 @@
-#
-
-# ~/.bash_profile
-#
-
-[[ -f ~/.bashrc ]] && . ~/.bashrc
-export JAVA_HOME=/opt/java
-export ECLIPSE_HOME=/usr/share/eclipse

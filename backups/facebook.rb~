@@ -1,0 +1,34 @@
+class Facebook
+
+    def self.user_photos(access_token)
+        api = Koala::Facebook::API.new(access_token)
+
+        photosPart = api.get_connections("me", "photos?limit=200")
+
+        photos = []
+        while photosPart.count > 0 do
+            photosPart.each do |i|
+                photos << i['source']
+            end
+            photosPart = photosPart.next_page
+        end
+
+        return photos
+    end
+
+    def self.user_info(access_token)
+        api = Koala::Facebook::API.new(access_token)
+
+        userInfo = api.get_object("me")
+
+        return userInfo
+    end
+
+    def self.user_albums(access_token)
+        api = Koala::Facebook::API.new(access_token)
+
+        albums = api.get_connections("me", "albums")
+
+        return albums
+    end
+end

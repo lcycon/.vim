@@ -1,0 +1,49 @@
+
+<?php
+     $template = str_replace(array("\r\n", "\r", "\n", "\t"), ' ',file_get_contents('../singleImageInsert.html'));
+     $folder = 'http://marcfam.marcjacobs.com/';
+ ?>
+
+function specialDiv(row,imgsrc,profile,content,username,source, id){
+    
+    /* This probably looks very strange. I don't think javascript has a
+     * replace all function. So I did this. - Zack.
+     */
+    template = '<?php echo $template;?>';
+    template = template.replace('_imgsrc_',encodeURI(imgsrc));
+    template = template.replace('_imgsrc_',encodeURI(imgsrc));
+    template = template.replace('_img_encoded_',encodeURIComponent(imgsrc));
+    template = template.replace('_from_',source);
+    if ( typeof content != 'undefined' && content != null){
+        template = template.replace('_caption_',content);
+        template = template.replace('_caption_',content);
+        template = template.replace('_cap_encoded_',encodeURIComponent(content));
+    }else{
+        template = template.replace('_caption_','');
+        template = template.replace('_caption_','');
+        template = template.replace('_cap_encoded_',encodeURIComponent(''));
+    }
+    template = template.replace('_user_',username);
+    template = template.replace('_url_',document.URL);
+    template = template.replace('_row_',row);
+    template = template.replace('_folder_','<?php echo $folder; ?>');
+    template = template.replace('_no_encode_',('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_no_encode_',('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_no_encode_',('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_link_',encodeURIComponent('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_link_',encodeURIComponent('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_link_',encodeURIComponent('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_link_',encodeURIComponent('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_lnk_not_encoded_',('<?php echo $folder; ?>'+Base64.encode(id)));
+    template = template.replace('_profile_',profile);
+    
+    /*img = '<img id = "simg' + row +'" class="singleimg hidden animated" src="'
+           +imgsrc+'">';
+    _content = '<div class="caption" id = "content' + row + '">' + content + '</div>';
+    
+    _username = '<div id = "username' + row + '">' + username + '</div>';
+    
+    _source = '<div id = "source' + row + '">' + source + '</div>';*/
+    
+    return template;
+}

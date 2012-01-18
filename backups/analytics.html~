@@ -1,0 +1,48 @@
+<head>
+    <title>Likes</title>
+    <link type="text/css" href="jq/css/dark-hive/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+    <script type="text/javascript" src="jq/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="jq/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+        }
+        #datepicker {
+            width: 200px;
+            margin: 0 auto;
+        }
+        .ui-datepicker-calendar th span {
+            color: #ffffff;
+        }
+        #likepanel {
+            text-align: center;
+        }
+    </style>
+    <script>
+        $(function(){
+            $("#cal1").datepicker();
+            $("#cal1").datepicker( "option", "dateFormat", "yy-mm-dd");
+            $("#cal2").datepicker();
+            $("#cal2").datepicker( "option", "dateFormat", "yy-mm-dd");
+        });
+
+        function submitit(){
+            $("#likepanel").html("Fetching your results. Please be patient as this could take up to a minute if there are many pictures.");
+            var url = 'analytics.php?from=' + $("#cal1").val() + '&to=' + $("#cal2").val() + '&num=10';
+            alert(url);
+            $.get(url, function(data){
+                    $("#likepanel").html(data);
+                });
+        }
+    </script>
+</head>
+<body>
+    <div id="datepicker">
+        From: <input type="text" id="cal1" size="30" />
+        To: <input type="text" id="cal2" size="30" />
+        <br /><br />
+            <input type="button" value="Submit" onclick="submitit()">
+    </div>
+    <br />
+    <div id="likepanel"></div>
+</body>

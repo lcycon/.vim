@@ -1,0 +1,31 @@
+public class Identifier extends ASTNode{
+
+    private String pValue;
+
+    private Identifier(String s){
+        pValue = s;
+    }
+
+    public double eval(java.util.Map<java.lang.String,java.lang.Double> symboltable){
+        if(!symboltable.containsKey(pValue)){
+            throw new RuntimeException("UNINITIALIZED VARIABLE: " + pValue);
+        }
+        return symboltable.get(pValue);
+    }
+
+    public static Identifier parse(java.lang.String s){
+        Character first = new Character(s.charAt(0));
+        if(!Character.isJavaIdentifierStart(first)){
+            return null;
+        }
+        for(int i = 1; i < s.length(); i++){
+            Character c = new Character(s.charAt(i));
+            if(!Character.isJavaIdentifierPart(c)){
+                return null;
+            }
+        }
+        return new Identifier(s);
+    }
+
+
+}

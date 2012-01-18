@@ -1,0 +1,118 @@
+#!/usr/bin/python
+#
+#  Musense music organization software
+#
+#  Copyright (C) 2010, 2011 Lucas Cycon
+#
+#  Musense is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  Musense is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with Musense.  If not, see <http://www.gnu.org/licenses/>.
+#
+from mutagen.flac import FLAC
+from mutagen.easyid3 import EasyID3
+from mutagen.oggvorbis import OggVorbis
+from mutagen.mp4 import MP4
+import os
+import re
+import commands
+from optparse import OptionParser
+
+def main():
+
+  # Init option parse
+  parser = OptionParser(version="1.1")
+  (options, args) = parser.parse_args()
+
+  # Get current working dir
+  curdir = os.getcwd()
+  print curdir + "\n"
+
+  # Begin main loop
+  cmd = "find \"%(Dir)s\" -regextype posix-extended -regex \".*\.(flac|ogg|mp3|m4a)\" -not -regex \"%(Dir)s/[A-Z0-9]{1}/.*\"" % {'Dir': curdir}
+  print cmd
+  
+  for i in commands.getoutput(cmd).split("\n"):
+    print i;
+    artist = None
+    fartist = None
+    album = None
+    title = None
+    track = None
+    filetype = None
+
+    # Match file extension to figure out type of music
+    m = re.match(".*\.(mp3|flac|ogg|mp4|m4a)", i)
+    if m:
+      filetype = m.group(1)
+      if filetype == "mp3":
+        audio = EasyID3(i)
+      elif filetype == "flac":
+        audio = FLAC(i)
+      elif filetype == "ogg":
+        audio = OggVorbis(i)
+      elif filetype == "mp4" or filetype == "m4a":
+        audio = MP4(i)
+        renameMP4(i, audio, curdir, filetype)
+        continue
+      else:
+        print "Unknown. This should never happen."
+    rename(i, audio, curdir, filetype)
+
+def rename(i, audio, curdir, ext):
+  if (audio.get("artist") == None or audio.get("title") == None):
+    os.renames(i, curdir + "/" + "unsuitable/" + re.match(".*/(.*\..*)", i).group(1))
+    return;
+  artist = audio.get("artist")[0].encode('ascii', 'ignore')
+  fartist = artist[0].upper()
+  if audio.get("album") == None:
+    album = "Misc"
+  else:
+    album = audio.get("album")[0].encode('ascii', 'ignore')
+  title = audio.get("title")[0].encode('ascii', 'ignore')
+  finaltitle = title.replace("/", "|")
+  if audio.has_key("tracknumber"):
+    track = re.match("0?([0-9]*)/?.*", audio.get("tracknumber")[0].encode('ascii', 'ignore')).group(1)
+    if track == '':
+      track = "None"
+    new = curdir + "/" + fartist + "/" + artist + "/" + album + "/" + track + " - " + finaltitle + "." + ext
+  else:
+    new = curdir + "/" + fartist + "/" + artist + "/" + album + "/" + finaltitle + "." + ext
+  if i != new:
+      os.renames(i, new)
+      print i + " --> " + new
+
+def renameMP4(i, audio, curdir, ext):
+  if (audio.get("\xa9ART") == None or audio.get("\xa9nam") == None):
+        os.renames(i, curdir + "/" + "unsuitable/" + re.match(".*/(.*\..*)", i).group(1))
+        return;
+  artist = audio.get("\xa9ART")[0].encode('ascii', 'ignore')
+  fartist = artist[0].upper()
+  if audio.get("\xa9alb") == None:
+    album = "Misc"
+  else:
+    album = audio.get("\xa9alb")[0].encode('ascii', 'ignore')
+  title = audio.get("\xa9nam")[0].encode('ascii', 'ignore')
+  finaltitle = title.replace("/", "|")
+  if audio.has_key("trkn"):
+    track = audio.get("trkn")[0][0]
+    if track == '':
+      track = "None"
+    new = curdir + "/" + fartist + "/" + artist + "/" + album + "/" + str(track) + " - " + finaltitle + "." + ext
+  else:
+    new = curdir + "/" + fartist + "/" + artist + "/" + album + "/" + finaltitle + "." + ext
+  if i != new:
+      new = new.replace("?.", "_.")
+      os.renames(i, new)
+      print i + " --> " + new
+
+if __name__ == "__main__":
+  main()

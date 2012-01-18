@@ -19,9 +19,6 @@ set nocompatible
 " Enable error files & error jumping. 
 set cf
 
-" Paste
-set paste
-
 " Mouse
 set mouse=a
 
@@ -29,6 +26,7 @@ set mouse=a
 set clipboard+=unnamed
 
 " Beter command-line completion
+set wildmode=longest:full
 set wildmenu
 
 " Allow backspacing over autoindent, linebreaks and start of insert actions
@@ -67,9 +65,6 @@ if has('statusline')
     set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%{exists('g:loaded_fugitive')?fugitive#statusline():''}%{exists('g:loaded_rvm')?rvm#statusline():''}%=%-16(\ %l,%c-%v\ %)%P
 endif
 
-" Right Margin Marker
-set colorcolumn=80
-
 "Default file types 
 set ffs=unix,dos,mac
 
@@ -91,7 +86,7 @@ filetype indent plugin on
 "===============================================================================
 
 " Set Color Scheme
-colorscheme tir_black
+colorscheme pablo
 
 
 " 256 colors
@@ -115,7 +110,7 @@ endif
 set nu
 
 " text wrapping
-setlocal textwidth=80
+setlocal textwidth=0
 
 "===============================================================================
 " Searching
@@ -137,6 +132,7 @@ set smartcase
 "==========================================================================
 " JAVA
 "==========================================================================
+autocmd Filetype java so ~/.vim/langs/java.vim
 autocmd Filetype java set makeprg=javac\ %
 autocmd Filetype java map <F10> :!java -cp "%:p:h" "%:t:r"<Return>:copen<Return>
 set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
@@ -171,9 +167,9 @@ au BufRead,BufNewFile *.{c,h,java} set tabstop=4
 " ==========================================================================="
 " RUBY"
 " ==========================================================================="
-au BufRead,BufNewFile *.{ruby} set tabstop=2
-au BufRead,BufNewFile *.{ruby} set expandtab
-au BufRead,BufNewFile *.{ruby} set shiftwidth=2
+au BufRead,BufNewFile *.{ruby,rb} set tabstop=2
+au BufRead,BufNewFile *.{ruby,rb} set expandtab
+au BufRead,BufNewFile *.{ruby,rb} set shiftwidth=2
 
 "==============================================================================
 " Assembly
@@ -188,6 +184,8 @@ au BufRead,BufNewFile *.s set tabstop=8
 " Mappings
 "==============================================================================
 
+map <F2> :NERDTreeToggle<CR>
+
 inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
 inoremap <buffer> <C-S-Space> <C-X><C-U><C-P> 
 " Map <Enter> to line break in normal mode, <S-Enter> to linebreak above.
@@ -195,15 +193,15 @@ map <S-Enter> O<ESC>
 map <Enter> o<ESC>
 
 " Shortcut to home directory
-cno $h e ~/
+cnoremap $h e ~/
 " Shortcut to workspace directory
-cno $w e ~/Projects
+cnoremap $w e ~/Projects
 " Shortcut to edit ToDo list
-cno $td e ~/Dropbox/lists/ToDo.txt
+cnoremap $td e ~/Dropbox/lists/ToDo.txt
 " Shortcut to .vimrc
-cno $v e ~/.vimrc
+cnoremap $v e ~/.vimrc
 " Shortcut to .gvimrc
-cno $g e ~/.gvimrc
+cnoremap $g e ~/.gvimrc
 
 " Map X to search selected text
 vmap X y/<C-R>"<CR>
@@ -229,12 +227,6 @@ imap <down> <C-o>gj
 map E ge
 
 
-
-
-
-" Add recently accessed projects menus (project plugin)
-set viminfo^=!
-
 " Minibuffer Explorer Settings
 let g:miniBufExplMapWindowsNavVim = 1
 let g:miniBufExplMapWindowNavVim = 1
@@ -245,9 +237,6 @@ let g:miniBufExplModSelTarget = 1
 " alt + n or alt + p to navigate between entries in QuickFix
 map <silent> <m-p> :cp <cr>
 map <silent> <m-n> :cn <cr>
-
-" Change which file opens after executing :Rails command"
-let g:rails_default_file='config/database.yml'
 
 "=========================================================================
 " CTAGS
@@ -284,6 +273,17 @@ set autowrite
 
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source ~/.vimrc
+
+" Ability to clear all buffers
+function! DAR()
+    let aval = char2nr('a')
+    let zval = char2nr('z')
+    let i = aval
+    while i <= zval
+        exe "let @".nr2char(i)." = \"\""
+        let i = i + 1
+    endw
+endfu
 
 "=========================================================================
 " Word Processor

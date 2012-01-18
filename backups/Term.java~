@@ -1,0 +1,48 @@
+public class Term extends ASTNode{
+
+    private char operation;
+
+    private Term(char  op, ASTNode... nodes){
+        super(nodes);
+        operation = op;
+    }
+
+    public static Term parse(java.lang.String s){
+        s = s.trim();
+        ASTNode res = null;
+        res = Factor.parse(s);
+        if(res != null){
+            return new Term('n', res);
+        }
+        char[] array = s.toCharArray();
+        int bracketSets = 0;
+        for(int i = array.length - 1; i >= 0; i--){
+            if(array[i] == ')'){
+                bracketSets++;
+            } else if(array[i] == '('){
+                bracketSets--;
+            } else if(bracketSets == 0 && (array[i] == '*' || array[i] == '/')){
+                ASTNode resright = null;
+                res = Term.parse(s.substring(0, i).trim());
+                resright = Factor.parse(s.substring(i + 1, array.length));
+                if(res != null && resright != null){
+                    return new Term(array[i], res, resright);
+                }
+            }
+        }
+        return null;
+    }
+
+    public double eval(java.util.Map<java.lang.String,java.lang.Double> symtab){
+        if(operation == '*'){
+            return getChild(0).eval(symtab) * getChild(1).eval(symtab);
+        } else if(operation == '/'){
+            return getChild(0).eval(symtab) / getChild(1).eval(symtab);
+        } else if(operation == 'n'){
+            return getChild(0).eval(symtab);
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+}

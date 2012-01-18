@@ -1,0 +1,168 @@
+import junit.framework.TestCase;
+
+/**
+ * Class to test an object implementing the PQueue interface
+ *
+ * @author Luke Cycon -- cs12fhr
+ */
+public class PQueueTester extends TestCase {
+
+    Heap12<Integer> test;
+
+    public static void main(String args[]) {
+        junit.textui.TestRunner.main(new
+                String[] { "PQueueTester" });
+    }
+
+    protected void setUp() throws Exception {
+        test = new Heap12<Integer>();
+    }
+
+    protected void tearDown() throws Exception {
+        test = null;
+    }
+    
+    /**
+     * This method checks that the add method correctly adds elements to the
+     * heap (Without resizing)
+     */
+    public void testAdd(){
+        for(int i = 0;i < 4; i++){
+            test.add(new Integer(i));
+        }
+        assertEquals(test.peek(), new Integer(3));
+    }
+
+    /**
+     * This method checks that the add method correctly adds elements to the
+     * heap
+     */
+    public void testAddExpand(){
+        for(int i = 0;i < 10; i++){
+            test.add(new Integer(i));
+        }
+        assertEquals(test.peek(), new Integer(9));
+    }
+
+    /**
+     * This method checks to see that the remove() method is functioning
+     * properly. Also checked is the size() method in conjunction.
+     */
+    public void testRemove(){
+        for(int i = 0;i < 4; i++){
+            test.add(new Integer(i));
+        }
+        assertEquals(test.size(), 4);
+        assertEquals(test.remove(), new Integer(3));
+        assertEquals(test.size(), 3);
+        assertEquals(test.remove(), new Integer(2));
+        assertEquals(test.size(), 2);
+        assertEquals(test.remove(), new Integer(1));
+        assertEquals(test.size(), 1);
+        assertEquals(test.remove(), new Integer(0));
+        assertEquals(test.size(), 0);
+    }
+
+    /**
+     * This method tests that the isEmpty() method returns the correct response
+     * in each case. Both cases are checked here.
+     */
+    public void testIsEmpty(){
+        for(int i = 0;i < 4; i++){
+            test.add(new Integer(i));
+        }
+        assertEquals(test.isEmpty(), false);
+        test = new Heap12<Integer>();
+        assertEquals(test.isEmpty(), true);
+    }
+
+    /**
+     * This method tests that the equals() method correctly determines if two
+     * Heap12's are equal. It also checks that a call to equals with another
+     * object type returns false.
+     */
+    public void testEquals(){
+        Heap12<Integer> test2 = new Heap12<Integer>();
+        for(int i = 0;i < 4; i++){
+            test.add(new Integer(i));
+            test2.add(new Integer(i));
+        }
+        assertTrue(test.equals(test2));
+        test2.add(new Integer(67));
+        assertFalse(test.equals(test2));
+        assertFalse(test.equals("Test"));
+    }
+
+    /**
+     * This method checks that when add() is called with a null parameter, an
+     * exception is thrown
+     */
+    public void testAddNull(){
+        try{
+            test.add(null);
+        } catch (Exception e){
+            return;
+        }
+        fail("Do not allow null elements!");
+    }
+
+    /**
+     * This method checks the parameterized constructor's fucntionality
+     */
+    public void testCopyConstruc(){
+        test.add(new Integer(1));
+        Heap12<Integer> temp = new Heap12<Integer>(test);
+        assertTrue(temp.equals(test));
+    }
+
+    /**
+     * This method checks that the sort function behaves as expected
+     */
+    public void testSort(){
+        Integer[] a = {new Integer(2), new Integer(3), new Integer(1)};
+        Heap12.sort(a);
+        assertEquals(new Integer(3), a[0]);
+        assertEquals(new Integer(2), a[1]);
+        assertEquals(new Integer(1), a[2]);
+
+        // Now test that a null value throws an exception
+        Integer[] b = {new Integer(2), new Integer(3), new Integer(1), null};
+        try{
+            Heap12.sort(b);
+        } catch (Exception e){
+            return;
+        }
+        fail("Should have thrown an exception!");
+    }
+
+    /**
+     * This method checks that the sort function throws an exception when called
+     * with a null parameter
+     */
+    public void testNullArraySort(){
+        // Now test for a null array
+        Integer[] b = null;
+        try{
+            Heap12.sort(b);
+        } catch (Exception e) {
+            return;
+        }
+        fail("Should throw an exception!");
+    }
+
+    public void testLargeInputs(){
+        Integer[] a = new Integer[3000];
+        for (int i = 0; i < 3000; i++){
+            test.add(new Integer(i));
+            a[i] = new Integer(i);
+        }
+        for (int i = 2999; i >= 0; i--){
+            assertEquals(new Integer(i), test.remove());
+        }
+        Heap12.sort(a);
+        for (int i = 0; i < 3000; i++){
+            assertEquals(new Integer(2999 - i), a[i]);
+        }
+    }
+
+}

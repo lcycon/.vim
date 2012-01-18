@@ -1,0 +1,2 @@
+class FacebookPhoto < ActiveRecord::Base
+end

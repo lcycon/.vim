@@ -1,0 +1,62 @@
+/**
+ * Class to represent an Assignment statement in an AST.
+ *
+ * @author Luke Cycon -- cs12fhr
+ */
+public class Assignment extends ASTNode{
+
+    // String to hold the variable being assigned
+    private String identifier;
+
+
+    private Assignment(String ident, ASTNode... params){
+        super(params);
+        identifier = ident;
+    }
+
+    /**
+     * Parses the given string into an AST tree rooted at an Assignment node.
+     *
+     * @param s String to parse
+     *
+     * @return An ASTNode rooting a tree or null if not able to parse
+     */
+    public static Assignment parse(java.lang.String s){
+        // We are going to move from left to right through the string, ignoring anything
+        // inside paranthesis, looking for the first equals sign.  Anything on the left we
+        // will then try to parse as an Indentifier.  If this returns null, no valid
+        // expression is left since there is an invalid "=" that will never be resolved.
+        // We needn't continue at that point
+        char[] array = s.toCharArray();
+        for(int i = 0; i < array.length; i++){
+            if(array[i] == '='){
+                ASTNode n1 = Identifier.parse(s.substring(0, i).trim());
+                ASTNode n2 = Expr.parse(s.substring(i + 1, array.length));
+                if(n1 != null && n2 != null){
+                    return new Assignment(s.substring(0, i).trim(), n1, n2);
+                } else {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Parse the AST rooted at this element. Also adds an entry to the variable map for
+     * this assignment
+     *
+     * @param symtab A mapping of Strings as identifiers to Doubles as their values
+     *
+     * @return the value of the subtree
+     *
+     * @throws java.lang.RuntimeException if an identifier cannot be resolved to a
+     * numerical value through the Map
+     */
+    public double eval(java.util.Map<java.lang.String,java.lang.Double> symtab){
+        Double val = getChild(1).eval(symtab);
+        symtab.put(identifier, val);
+        return val;
+    }
+
+}

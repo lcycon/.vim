@@ -1,0 +1,71 @@
+% LaTeX file for resume 
+% This file uses the resume document class (res.cls)
+
+\documentclass{res}
+%\usepackage{helvetica} % uses helvetica postscript font (download helvetica.sty)
+%\usepackage{newcent}   % uses new century schoolbook postscript font 
+\setlength{\textheight}{10in} % increase text height to fit on 1-page	
+\addtolength{\oddsidemargin}{-.575in}
+\addtolength{\topmargin}{-.475in}
+
+\begin{document}
+
+\name{Stephen Ma\\[12pt]}     % the \\[12pt] adds a blank
+				        % line after name
+
+\address{\bf PRESENT ADDRESS \\ \#70432 \\ 9450 Gilman Dr \\  La Jolla, CA 92092-0100 \\  mastephen8@gmail.com \\  (310) 347 - 9086}
+\address{\bf PERMANENT ADDRESS \\ 22638 Draille Dr \\  Torrance, CA 90505 \\  mastephen8@gmail.com \\  (310) 347 - 9086}
+                                  
+\begin{resume}
+
+\section{HIGH SCHOOL EDUCATION}          
+    Palos Verdes Peninsula High School
+
+\section{COLLEGE EDUCATION}
+    Undergraduate at University of California, San Diego \\
+    BS Psychology -- Class of 2015 \\
+    Minor in Chemistry
+
+\section{WORK EXPERIENCE}
+   \vspace{-0.1in}	
+   \begin{tabbing}
+   \hspace{1.0in}\= \hspace{3.0in}\= \kill % set up two tab positions
+    {\bf Tutor} \>Torrance, CA     \>Fall 2008-2010\\
+   \end{tabbing}\vspace{-40pt}      % suppress blank line after tabbing
+    Tutored kids ranging from 7th to 9th grade in various subjects, including algebra and English.
+    
+\section{STANDARDIZED TESTING}
+    \begin{itemize}
+      \item ACT Superscore - 34
+      \item SAT Subject Test - Math II - 740
+      \item SAT Subject Test - Biology - 700
+    \end{itemize}
+    
+\section{ACADEMICS}
+    \begin{itemize}
+      \item {\bf AP Psychology} - Junior year - 5 on the AP Exam
+      \item {\bf AP Biology} - Junior Year - 4 on the AP Exam
+      \item {\bf AP Environmental Science} - Junior year - 5 on the AP Exam
+      \item {\bf AP Physics B} - Senior Year - 3 on the AP Exam
+      \item {\bf AP English Language} - Senior Year - 4 on the AP Exam
+      \item {\bf AP Calculus AB} - Senior Year - 5 on the AP Exam
+    \end{itemize}
+    
+\section{EXTRACURRICULAR ACTIVITIES}          
+    \begin{itemize}
+      \item Guitar (2 years)
+      \item Dragonboating (6 years)
+      \item PVPHS Chinese Games Club (President/Board Member)
+      \item PVPHS Film Club (President/Board Member)
+      \item California Scholarship Federation
+    \end{itemize}
+
+\section{NON-PROFIT}
+    \begin{itemize}
+        \item I volunteered as a listener for Community Helpline in Torrance. As a listener I had to take calls ranging from financial needs to suicidal thoughts.
+        \item Every year at the end of Dragonboating season, our team would pick up litter along Mother's Beach as part of team duties to the Southern California Dragonboat Club.
+    \end{itemize}
+ 
+
+\end{resume}
+\end{document}

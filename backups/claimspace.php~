@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<title>Superego &nbsp;&hearts;&nbsp; Your Special Place In The Cloud </title>
+<head>
+
+<link rel="shortcut icon" href="http://socialprintstudio.com/images/SP_icon.gif" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="<?php echo base_url() . 'res/claim.css'; ?>" />
+
+<script type="text/javascript">
+
+
+
+
+function signMeUp()
+{
+	
+	var uname = $("#usernameField").val();
+	if(uname == ""){
+	alert("You must enter a username");
+		return;}
+	
+
+	var postStr = "<?php echo base_url() . 'main/checkUsername'; ?>";
+	
+	$.post(
+		postStr,
+		{ username: uname },
+		function(data)
+		{
+			if(parseInt(data) == 1)
+			{
+				alert("That username is taken! Oh noes!");
+				return;
+			}
+			
+			window.location = "<?php echo base_url() . 'main/addUser/'; ?>" + uname;
+		}
+	);
+}
+
+
+
+
+$(document).ready(function() {
+	
+	$("#submit").click(function() { signMeUp(); });
+	
+	
+	$("#usernameField").focus(function() {
+$("#usernameField").val(''); 
+$("#usernameField").css("color","#555"); 
+});
+
+
+});
+
+
+
+
+
+
+	
+</script>
+
+
+
+
+
+<!--google tracking-->
+
+</head>
+<body>
+
+<div id="left">
+	
+	
+	<h1>
+    </h1>
+        <h2>Last Step:
+        set a custom URL for your profile</h2>
+<p><h1><span class="pink">Super</span><span class="blue">ego.me</span>/<input id="usernameField"  type="text" value='username' /><br><button class="blue-pill" id="submit">Submit</button></p> </h1>
+    
+   
+
+		
+		
+		
+    
+   
+   </div>
+	
+
+<div id="colorGuard"></div>
+<div id="headerwrap">
+
+</div> <!--headerwrap-->
+
+<div class="clearIt"></div>
+
+<!--<div id="headerDivider"></div>
+<div id="footer"></div>
+
+-->
+
+
+</body>
+</html>

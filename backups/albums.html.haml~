@@ -1,0 +1,2 @@
+%h1 Facebook::TestPages#albums
+%p Find me in app/views/facebook/test_pages/albums.html.haml

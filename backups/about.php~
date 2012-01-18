@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<title>Superego &nbsp;&hearts;&nbsp; Your Special Place In The Cloud </title>
+<head>
+
+<link rel="shortcut icon" href="http://socialprintstudio.com/images/SP_icon.gif" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="<?php echo base_url() . 'res/claim.css'; ?>" />
+
+<!--google tracking-->
+
+</head>
+<body>
+
+<div id="left">
+	
+	
+	<h1>
+    </h1>
+	<h2>*All YOU, All the time*
+
+Superego is a unique way to project your identity online. We use a special
+algorithm to scan your Facebook photos and create a web gallery of the
+images that say the most about you and your lifestyle.
+
+While sites like About.me and Flavors.me create generic profile pages that
+pull content from around the web, our goal was to create a site that cuts
+right to the core, and appeals directly to your ego. Visit the page
+whenever you want a little ego boost, or share your page with others to
+show them just how amazing your life is.
+
+Get started now, by connecting with Facebook. You can quickly
+delete your profile anytime by logging in via our homepage. Take a
+look around… its a simple site now, but we'd love your input, Email us at
+<a href="mailto:superego@socialprintstudio.com">superego@socialprintstudio.com</a></h2>
+   
+   </div>
+	
+
+<div id="colorGuard"></div>
+<div id="headerwrap">
+
+</div> <!--headerwrap-->
+
+<div class="clearIt"></div>
+
+<!--<div id="headerDivider"></div>
+<div id="footer"></div>
+
+-->
+
+
+</body>
+</html>
