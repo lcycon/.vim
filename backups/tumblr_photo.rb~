@@ -1,2 +1,0 @@
-class TumblrPhoto < ActiveRecord::Base
-end

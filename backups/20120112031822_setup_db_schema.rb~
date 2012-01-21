@@ -1,7 +1,0 @@
-class SetupDbSchema < ActiveRecord::Migration
-  def up
-    drop_table :carts
-    drop_table :products
-    drop_table :sessions
-  end
-end
