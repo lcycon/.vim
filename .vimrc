@@ -69,6 +69,9 @@ endif
 "Default file types 
 set ffs=unix,dos,mac
 
+"Setup pathogen
+call pathogen#infect()
+
 "===============================================================================
 " Formatting Options
 "===============================================================================
@@ -133,35 +136,11 @@ set smartcase
 "==========================================================================
 " JAVA
 "==========================================================================
-autocmd Filetype java so ~/.vim/langs/java.vim
-autocmd Filetype java set makeprg=javac\ %
-autocmd Filetype java map <F10> :!java -cp "%:p:h" "%:t:r"<Return>:copen<Return>
-autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-autocmd Filetype java map <F9> :make<Return>:copen<Return>
-autocmd Filetype java map <F7> :cprevious<Return>
-autocmd Filetype java map <F8> :cnext<Return>
-autocmd Filetype java map <F10> :run<Return>
-
-autocmd Filetype java setlocal cindent
-
-" Autocomplete
-autocmd Filetype java setlocal omnifunc=javacomplete#CompleteParamsInfo
-
-" Java Highlighting options
-autocmd Filetype java let java_highlight_all=1
-autocmd Filetype java let java_highlight_functions="style"
-autocmd Filetype java let java_allow_cpp_keywords=1 
-autocmd Filetype java hi link javaParen Comment
-
-imap <buffer> <C-X><C-U> <C-X><C-U><C-P>
-imap <buffer> <C-S-Space> <C-X><C-U><C-P>
-
 "================================================================================
 " C/C++/Java
 "===============================================================================
 
 " Expand tabs in C with spaces
-au BufRead,BufNewFile *.{ruby,rb} set tabstop=4
 au BufRead,BufNewFile *.{c,h,java} set expandtab
 au BufRead,BufNewFile *.{c,h,java} set shiftwidth=4
 
@@ -180,7 +159,6 @@ au BufRead,BufNewFile *.{ruby,rb} set shiftwidth=2
 au BufRead,BufNewFile *.s set noexpandtab
 au BufRead,BufNewFile *.s set shiftwidth=8
 au BufRead,BufNewFile *.s set tabstop=8
-au BufRead,BufNewFile *.s unmap! <Tab>
 
 "==============================================================================
 " JavaScript/HTML
@@ -195,33 +173,12 @@ au BufRead,BufNewFile *.{js,html} set expandtab
 " Mappings
 "==============================================================================
 
-map <F2> :NERDTreeToggle<CR>
-
-inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
-inoremap <buffer> <C-S-Space> <C-X><C-U><C-P> 
-" Map <Enter> to line break in normal mode, <S-Enter> to linebreak above.
-map <S-Enter> O<ESC>
-map <Enter> o<ESC>
-
 " Shortcut to home directory
 cnoremap $h e ~/
 " Shortcut to workspace directory
 cnoremap $w e ~/Projects
-" Shortcut to edit ToDo list
-cnoremap $td e ~/Dropbox/lists/ToDo.txt
 " Shortcut to .vimrc
 cnoremap $v e ~/.vimrc
-" Shortcut to .gvimrc
-cnoremap $g e ~/.gvimrc
-
-" Map X to search selected text
-vmap X y/<C-R>"<CR>
-
-" <C-Backspace> to <Delete>
-imap <C-Backspace> <Delete>
-
-imap <C-L> <Delete>
-
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the next
 " search
@@ -232,33 +189,14 @@ set sm
 map <up> gk
 map k gk
 imap <up> <C-o>gk
-map <down gj
+map <down> gj
 map j gj
 imap <down> <C-o>gj
 map E ge
 
-
-" Minibuffer Explorer Settings
-let g:miniBufExplMapWindowsNavVim = 1
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
-
-" alt + n or alt + p to navigate between entries in QuickFix
-map <silent> <m-p> :cp <cr>
-map <silent> <m-n> :cn <cr>
-
 "=========================================================================
 " CTAGS
 "=========================================================================
-
-let Tlist_Ctags_Cmd = "/usr/bin/ctags"
-let Tlist_WinWidth = 50
-map <F4> :TlistToggle<cr>
-
-" Build tags libs for the current working directory
-map <F3> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "=========================================================================
 " Backup"
@@ -275,9 +213,6 @@ set directory=~/.vim/tmp
 " General
 "=========================================================================
 "
-au BufRead,BufNewFile *.{ruby,rb} set tabstop=4
-au BufRead,BufNewFile *.{c,h,java} set expandtab
-au BufRead,BufNewFile *.{c,h,java} set shiftwidth=4
 
 "Sets how many lines of history VIM has to remember
 set history=256
