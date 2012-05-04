@@ -1,6 +1,7 @@
 "===============================================================================
+"
 " VIMRC
-" Author: Adam William Kuipers
+" Author: Luke Cycon
 " Version: 2011.08.02.01
 "===============================================================================
 
@@ -86,7 +87,7 @@ filetype indent plugin on
 "===============================================================================
 
 " Set Color Scheme
-colorscheme pablo
+colorscheme solarized
 
 
 " 256 colors
@@ -135,11 +136,11 @@ set smartcase
 autocmd Filetype java so ~/.vim/langs/java.vim
 autocmd Filetype java set makeprg=javac\ %
 autocmd Filetype java map <F10> :!java -cp "%:p:h" "%:t:r"<Return>:copen<Return>
-set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
-map <F9> :make<Return>:copen<Return>
-map <F7> :cprevious<Return>
-map <F8> :cnext<Return>
-map <F10> :run<Return>
+autocmd Filetype java set errorformat=%A%f:%l:\ %m,%-Z%p^,%-C%.%#
+autocmd Filetype java map <F9> :make<Return>:copen<Return>
+autocmd Filetype java map <F7> :cprevious<Return>
+autocmd Filetype java map <F8> :cnext<Return>
+autocmd Filetype java map <F10> :run<Return>
 
 autocmd Filetype java setlocal cindent
 
@@ -155,14 +156,14 @@ autocmd Filetype java hi link javaParen Comment
 imap <buffer> <C-X><C-U> <C-X><C-U><C-P>
 imap <buffer> <C-S-Space> <C-X><C-U><C-P>
 
-"===============================================================================
+"================================================================================
 " C/C++/Java
 "===============================================================================
 
 " Expand tabs in C with spaces
+au BufRead,BufNewFile *.{ruby,rb} set tabstop=4
 au BufRead,BufNewFile *.{c,h,java} set expandtab
 au BufRead,BufNewFile *.{c,h,java} set shiftwidth=4
-au BufRead,BufNewFile *.{c,h,java} set tabstop=4
 
 " ==========================================================================="
 " RUBY"
@@ -179,6 +180,16 @@ au BufRead,BufNewFile *.{ruby,rb} set shiftwidth=2
 au BufRead,BufNewFile *.s set noexpandtab
 au BufRead,BufNewFile *.s set shiftwidth=8
 au BufRead,BufNewFile *.s set tabstop=8
+au BufRead,BufNewFile *.s unmap! <Tab>
+
+"==============================================================================
+" JavaScript/HTML
+"==============================================================================
+
+au BufRead,BufNewFile *.{js,html} set smartindent
+au BufRead,BufNewFile *.{js,html} set tabstop=4
+au BufRead,BufNewFile *.{js,html} set shiftwidth=4
+au BufRead,BufNewFile *.{js,html} set expandtab
 
 "==============================================================================
 " Mappings
@@ -263,6 +274,11 @@ set directory=~/.vim/tmp
 "=========================================================================
 " General
 "=========================================================================
+"
+au BufRead,BufNewFile *.{ruby,rb} set tabstop=4
+au BufRead,BufNewFile *.{c,h,java} set expandtab
+au BufRead,BufNewFile *.{c,h,java} set shiftwidth=4
+
 "Sets how many lines of history VIM has to remember
 set history=256
 " Set auto read when a file is changed from the outside
