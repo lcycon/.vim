@@ -187,6 +187,13 @@ cnoremap $w e ~/Projects
 " Shortcut to .vimrc
 cnoremap $v e ~/.vimrc
 
+" Map NERDTree
+map <F2> :NERDTreeToggle<CR>
+
+" Map Command-T
+noremap <leader>t :CommandT<CR>
+noremap <leader>b :CommandTBuffer<CR>
+
 " Map <C-L> (redraw screen) to also turn off search highlighting until the next
 " search
 noremap <C-L> :nohl<CR><C-L>
@@ -220,6 +227,15 @@ set directory=~/.vim/tmp
 " General
 "=========================================================================
 "
+
+set completeopt+=longest
+set completeopt-=preview
+" SuperTab stuff
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+" Make Omnicomplete close the suggestion window on cursor move
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 "Sets how many lines of history VIM has to remember
 set history=256
