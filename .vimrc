@@ -194,6 +194,9 @@ map <F2> :NERDTreeToggle<CR>
 noremap <leader>t :CommandT<CR>
 noremap <leader>b :CommandTBuffer<CR>
 
+" Add a fast mapping to keyword complete
+inoremap <buffer> <S-Tab> <C-X><C-P>
+
 " Map <C-L> (redraw screen) to also turn off search highlighting until the next
 " search
 noremap <C-L> :nohl<CR><C-L>
