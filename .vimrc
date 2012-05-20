@@ -89,10 +89,6 @@ filetype indent plugin on
 " Display
 "===============================================================================
 
-" Set Color Scheme
-colorscheme solarized
-
-
 " 256 colors
 set t_Co=256
 
@@ -115,6 +111,9 @@ set nu
 
 " text wrapping
 setlocal textwidth=0
+
+" Set Color Scheme
+colorscheme solarized
 
 "===============================================================================
 " Searching
@@ -198,7 +197,8 @@ noremap <leader>t :CommandT<CR>
 noremap <leader>b :CommandTBuffer<CR>
 
 " Add a fast mapping to keyword complete
-inoremap <buffer> <S-Tab> <C-X><C-P>
+inoremap <C-Space> <C-X><C-O>
+imap <C-@> <C-Space>
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the next
 " search
@@ -234,11 +234,12 @@ set directory=~/.vim/tmp
 "=========================================================================
 "
 
+set softtabstop=4
+
 set completeopt+=longest
 set completeopt-=preview
 " SuperTab stuff
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
 " Make Omnicomplete close the suggestion window on cursor move
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
