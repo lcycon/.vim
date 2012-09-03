@@ -146,6 +146,21 @@ nnoremap <leader>l :TagbarToggle<CR>
 autocmd Filetype java setlocal omnifunc=javacomplete#Complete
 
 "================================================================================
+" Scala
+"===============================================================================
+
+" Expand tabs in C with spaces
+au BufRead,BufNewFile *.{scala,spde} set filetype=scala
+
+"================================================================================
+" GIT
+"===============================================================================
+
+" Expand tabs in C with spaces
+au BufRead,BufNewFile *new-commit set filetype=gitcommit
+au BufRead,BufNewFile *differential-update-comments set filetype=gitcommit
+
+"================================================================================
 " C/C++/Java
 "===============================================================================
 
@@ -174,9 +189,18 @@ au BufRead,BufNewFile *.s set tabstop=8
 "==============================================================================
 
 au BufRead,BufNewFile *.{js,html} set smartindent
-au BufRead,BufNewFile *.{js,html} set tabstop=4
-au BufRead,BufNewFile *.{js,html} set shiftwidth=4
+au BufRead,BufNewFile *.{js,html} set tabstop=2
+au BufRead,BufNewFile *.{js,html} set shiftwidth=2
 au BufRead,BufNewFile *.{js,html} set expandtab
+
+"==============================================================================
+" Markdown
+"==============================================================================
+
+au BufRead,BufNewFile *.{md} set smartindent
+au BufRead,BufNewFile *.{md} set tabstop=4
+au BufRead,BufNewFile *.{md} set shiftwidth=4
+au BufRead,BufNewFile *.{md} set expandtab
 
 "==============================================================================
 " Mappings
@@ -239,10 +263,15 @@ set softtabstop=4
 set completeopt+=longest
 set completeopt-=preview
 " SuperTab stuff
-let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
+" let g:SuperTabDefaultCompletionType = "<c-x><c-p>"
+let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabLongestEnhanced = 1
 " Make Omnicomplete close the suggestion window on cursor move
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" Git commit messages are tarded
+autocmd BufRead,BufNewFile *MERGE_MSG set filetype=gitcommit
 
 "Sets how many lines of history VIM has to remember
 set history=256
