@@ -169,11 +169,18 @@ au BufRead,BufNewFile *.{c,h,java} set expandtab
 au BufRead,BufNewFile *.{c,h,java} set shiftwidth=4
 
 " ==========================================================================="
-" RUBY"
+" RUBY
 " ==========================================================================="
 au BufRead,BufNewFile *.{ruby,rb} set tabstop=2
 au BufRead,BufNewFile *.{ruby,rb} set expandtab
 au BufRead,BufNewFile *.{ruby,rb} set shiftwidth=2
+
+" ==========================================================================="
+" Python
+" ==========================================================================="
+au BufRead,BufNewFile *.{py} set tabstop=4
+au BufRead,BufNewFile *.{py} set expandtab
+au BufRead,BufNewFile *.{py} set shiftwidth=4
 
 "==============================================================================
 " Assembly
@@ -185,13 +192,14 @@ au BufRead,BufNewFile *.s set shiftwidth=8
 au BufRead,BufNewFile *.s set tabstop=8
 
 "==============================================================================
-" JavaScript/HTML
+" JavaScript/HTML/CoffeeScript
 "==============================================================================
 
-au BufRead,BufNewFile *.{js,html} set smartindent
-au BufRead,BufNewFile *.{js,html} set tabstop=2
-au BufRead,BufNewFile *.{js,html} set shiftwidth=2
-au BufRead,BufNewFile *.{js,html} set expandtab
+au BufRead,BufNewFile *.{js,html,coffee} set smartindent
+au BufRead,BufNewFile *.{js,html,coffee} set tabstop=2
+au BufRead,BufNewFile *.{js,html,coffee} set shiftwidth=2
+au BufRead,BufNewFile *.{js,html,coffee} set expandtab
+au BufRead,BufNewFile *.{html} imap <Tab> <C-E>
 
 "==============================================================================
 " Markdown
