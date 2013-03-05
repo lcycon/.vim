@@ -58,13 +58,15 @@ set si
 set background=dark
 
 " Status Line
-if has('statusline')
-    set laststatus=2
-    set statusline+=\ [%{getcwd()}]
-    set showcmd
-    set ruler
-    set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%{exists('g:loaded_fugitive')?fugitive#statusline():''}%{exists('g:loaded_rvm')?rvm#statusline():''}%=%-16(\ %l,%c-%v\ %)%P
-endif
+"if has('statusline')
+"    set laststatus=2
+"    set statusline+=\ [%{getcwd()}]
+"    set showcmd
+"    set ruler
+"    set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%{exists('g:loaded_fugitive')?fugitive#statusline():''}%{exists('g:loaded_rvm')?rvm#statusline():''}%=%-16(\ %l,%c-%v\ %)%P
+"endif
+set rtp+=/home/luke/.vim/bundle/powerline/powerline/bindings/vim
+set laststatus=2
 
 "Default file types 
 set ffs=unix,dos,mac
@@ -140,6 +142,16 @@ let g:tagbar_usearrows = 1
 nnoremap <leader>l :TagbarToggle<CR>
 
 "==========================================================================
+" General
+"==========================================================================
+
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set softtabstop=2
+
+"==========================================================================
 " JAVA
 "==========================================================================
 
@@ -181,6 +193,7 @@ au BufRead,BufNewFile *.{ruby,rb} set shiftwidth=2
 au BufRead,BufNewFile *.{py} set tabstop=4
 au BufRead,BufNewFile *.{py} set expandtab
 au BufRead,BufNewFile *.{py} set shiftwidth=4
+au BufRead,BufNewFile *.{py} set softtabstop=4
 
 "==============================================================================
 " Assembly
@@ -211,8 +224,19 @@ au BufRead,BufNewFile *.{md} set shiftwidth=4
 au BufRead,BufNewFile *.{md} set expandtab
 
 "==============================================================================
+" Haskell
+"==============================================================================
+
+au BufRead,BufNewFile *.{hs} set smartindent
+au BufRead,BufNewFile *.{hs} set tabstop=4
+au BufRead,BufNewFile *.{hs} set shiftwidth=4
+au BufRead,BufNewFile *.{hs} set expandtab
+
+"==============================================================================
 " Mappings
 "==============================================================================
+
+let g:syntastic_mode_map = { 'mode': 'passive' }
 
 " Shortcut to home directory
 cnoremap $h e ~/
@@ -266,7 +290,10 @@ set directory=~/.vim/tmp
 "=========================================================================
 "
 
-set softtabstop=4
+" 80 char limit bar
+set cc=80
+
+set wildignore+=node_modules
 
 set completeopt+=longest
 set completeopt-=preview
