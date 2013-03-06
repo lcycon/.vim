@@ -227,10 +227,13 @@ au BufRead,BufNewFile *.{md} set expandtab
 " Haskell
 "==============================================================================
 
-au BufRead,BufNewFile *.{hs} set smartindent
-au BufRead,BufNewFile *.{hs} set tabstop=4
-au BufRead,BufNewFile *.{hs} set shiftwidth=4
-au BufRead,BufNewFile *.{hs} set expandtab
+au BufRead,BufNewFile *.{hs,lhs} set smartindent
+au BufRead,BufNewFile *.{hs,lhs} set tabstop=4
+au BufRead,BufNewFile *.{hs,lhs} set shiftwidth=4
+au BufRead,BufNewFile *.{hs,lhs} set expandtab
+au BufRead,BufNewFile *.{hs,lhs} setlocal omnifunc=necoghc#omnifunc
+let g:haskell_tex = 0
+let g:haskell_unicode = 0
 
 "==============================================================================
 " Mappings
