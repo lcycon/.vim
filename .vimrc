@@ -65,8 +65,11 @@ set background=dark
 "    set ruler
 "    set statusline=[%n]\ %<%.99f\ %h%w%m%r%y%{exists('g:loaded_fugitive')?fugitive#statusline():''}%{exists('g:loaded_rvm')?rvm#statusline():''}%=%-16(\ %l,%c-%v\ %)%P
 "endif
-set rtp+=/home/luke/.vim/bundle/powerline/powerline/bindings/vim
+set rtp+=/Users/lukecycon/.vim/bundle/powerline/powerline/bindings/vim
 set laststatus=2
+let g:Powerline_theme="skwp"
+let g:Powerline_colorscheme="skwp"
+let g:Powerline_symbols = 'fancy'
 
 "Default file types 
 set ffs=unix,dos,mac
