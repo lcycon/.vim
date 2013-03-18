@@ -82,6 +82,7 @@ call pathogen#infect()
 "===============================================================================
 
 behave xterm
+set termencoding=utf-8
 
 " Attempt to determine the type of a file based on its name and possibly its
 " contents. Use this to allow intelligent auto indenting for each filetype, and
