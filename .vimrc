@@ -300,7 +300,7 @@ set directory=~/.vim/tmp
 " 80 char limit bar
 set cc=80
 
-set wildignore+=node_modules
+set wildignore+=node_modules,target
 
 set completeopt+=longest
 set completeopt-=preview
