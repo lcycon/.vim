@@ -24,7 +24,7 @@ set cf
 set mouse=a
 
 " Yanks go on clipboard instead
-set clipboard+=unnamed
+set clipboard=unnamed
 
 " Beter command-line completion
 set wildmode=longest:full
@@ -226,6 +226,8 @@ au BufRead,BufNewFile *.{md} set smartindent
 au BufRead,BufNewFile *.{md} set tabstop=4
 au BufRead,BufNewFile *.{md} set shiftwidth=4
 au BufRead,BufNewFile *.{md} set expandtab
+let g:pandoc_use_hard_wraps = 1
+let g:pandoc_no_folding = 1
 
 "==============================================================================
 " Haskell
@@ -238,6 +240,7 @@ au BufRead,BufNewFile *.{hs,lhs} set expandtab
 au BufRead,BufNewFile *.{hs,lhs} setlocal omnifunc=necoghc#omnifunc
 let g:haskell_tex = 0
 let g:haskell_unicode = 0
+let g:haddock_browser = "open"
 
 "==============================================================================
 " Mappings
