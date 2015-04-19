@@ -212,6 +212,7 @@ au BufRead,BufNewFile *.s set tabstop=8
 " JavaScript/HTML/CoffeeScript
 "==============================================================================
 
+au BufRead,BufNewFile *.iced set filetype=coffee
 au BufRead,BufNewFile *.{js,html,coffee} set smartindent
 au BufRead,BufNewFile *.{js,html,coffee} set tabstop=2
 au BufRead,BufNewFile *.{js,html,coffee} set shiftwidth=2
@@ -241,6 +242,8 @@ au BufRead,BufNewFile *.{hs,lhs} setlocal omnifunc=necoghc#omnifunc
 let g:haskell_tex = 0
 let g:haskell_unicode = 0
 let g:haddock_browser = "open"
+let g:vim_annotations_offset = '/.liquid/'
+let g:syntastic_haskell_liquidd_args = "--diff"
 
 "==============================================================================
 " Mappings
@@ -317,6 +320,8 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Git commit messages are tarded
 autocmd BufRead,BufNewFile *MERGE_MSG set filetype=gitcommit
+
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 
 "Sets how many lines of history VIM has to remember
 set history=256
